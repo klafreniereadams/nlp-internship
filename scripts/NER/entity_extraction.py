@@ -214,3 +214,6 @@ with open(output_path, "w") as f:
     json.dump(labeled_data, f, indent=2)
 
 print(f"Labeled dataset written to {output_path}")
+
+# amenity taxonomy.json is now shorter than 200 amenities because I manually removed 
+# illogical bigrams
