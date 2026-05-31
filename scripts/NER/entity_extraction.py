@@ -46,7 +46,7 @@ class EntityExtractor:
         ]
 
         self.price_patterns = [
-            r'\$?(\d{5,})'
+            r"\$?\s*(\d{1,3}(?:,\d{3}){2,}|\d{6,})"
         ]
 
         self.sqft_patterns = [

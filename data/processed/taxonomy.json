@@ -1,24 +1,12 @@
 {
   "terms": [
     {
-      "id": 4,
-      "term": "living room"
-    },
-    {
       "id": 5,
       "term": "primary suite"
     },
     {
       "id": 7,
       "term": "natural light"
-    },
-    {
-      "id": 8,
-      "term": "floor plan"
-    },
-    {
-      "id": 9,
-      "term": "living space"
     },
     {
       "id": 11,
@@ -57,10 +45,6 @@
       "term": "pool spa"
     },
     {
-      "id": 23,
-      "term": "sq ft"
-    },
-    {
       "id": 24,
       "term": "laundry room"
     },
@@ -81,32 +65,16 @@
       "term": "conveniently located"
     },
     {
-      "id": 33,
-      "term": "living area"
-    },
-    {
       "id": 34,
       "term": "views of"
-    },
-    {
-      "id": 35,
-      "term": "everyday living"
     },
     {
       "id": 36,
       "term": "quartz countertops"
     },
     {
-      "id": 38,
-      "term": "square feet"
-    },
-    {
       "id": 39,
       "term": "dining room"
-    },
-    {
-      "id": 40,
-      "term": "sq ft."
     },
     {
       "id": 43,
@@ -165,14 +133,6 @@
       "term": "covered patio"
     },
     {
-      "id": 74,
-      "term": "bedrooms 2"
-    },
-    {
-      "id": 75,
-      "term": "3 bedrooms"
-    },
-    {
       "id": 78,
       "term": "spacious living"
     },
@@ -201,10 +161,6 @@
       "term": "additional bedrooms"
     },
     {
-      "id": 95,
-      "term": "surrounded by"
-    },
-    {
       "id": 96,
       "term": "in desirable"
     },
@@ -221,10 +177,6 @@
       "term": "cozy fireplace"
     },
     {
-      "id": 101,
-      "term": "full bath"
-    },
-    {
       "id": 102,
       "term": "washer dryer"
     },
@@ -235,10 +187,6 @@
     {
       "id": 107,
       "term": "formal dining"
-    },
-    {
-      "id": 108,
-      "term": "full bathroom"
     },
     {
       "id": 109,
@@ -267,10 +215,6 @@
     {
       "id": 119,
       "term": "brand new"
-    },
-    {
-      "id": 120,
-      "term": "abundant natural"
     },
     {
       "id": 122,
@@ -303,10 +247,6 @@
     {
       "id": 132,
       "term": "bonus room"
-    },
-    {
-      "id": 133,
-      "term": "4 bedrooms"
     },
     {
       "id": 135,
@@ -397,20 +337,8 @@
       "term": "sliding glass"
     },
     {
-      "id": 181,
-      "term": "2 bedrooms"
-    },
-    {
       "id": 183,
       "term": "soaring ceilings"
-    },
-    {
-      "id": 184,
-      "term": "2 bathrooms"
-    },
-    {
-      "id": 185,
-      "term": "away from"
     },
     {
       "id": 186,
