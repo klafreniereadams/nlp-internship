@@ -42,7 +42,7 @@
     },
     {
       "id": 21,
-      "term": "pool spa"
+      "term": "spa"
     },
     {
       "id": 24,
@@ -238,7 +238,7 @@
     },
     {
       "id": 130,
-      "term": "sparkling pool"
+      "term": "pool"
     },
     {
       "id": 131,
@@ -383,6 +383,70 @@
     {
       "id": 200,
       "term": "community amenities"
+    },
+    {
+      "id": 201,
+      "term": "1 bedroom"
+    },
+    {
+      "id": 202,
+      "term": "2 bedroom"
+    },
+    {
+      "id": 203,
+      "term": "3 bedroom"
+    },
+    {
+      "id": 204,
+      "term": "4 bedroom"
+    },
+    {
+      "id": 205,
+      "term": "5 bedroom"
+    },
+    {
+      "id": 206,
+      "term": "6 bedroom"
+    },
+    {
+      "id": 207,
+      "term": "1 Bedroom"
+    },
+    {
+      "id": 208,
+      "term": "2 Bedroom"
+    },
+    {
+      "id": 209,
+      "term": "garden"
+    },
+    {
+      "id": 210,
+      "term": "community amenities"
+    },
+    {
+      "id": 211,
+      "term": "3-car garage"
+    },
+    {
+      "id": 212,
+      "term": "RV access"
+    },
+    {
+      "id": 213,
+      "term": "EV charging"
+    },
+    {
+      "id": 214,
+      "term": "office"
+    },
+    {
+      "id": 215,
+      "term": "community amenities"
+    },
+    {
+      "id": 216,
+      "term": "movie theater"
     }
   ]
 }
