@@ -279,6 +279,22 @@
     {
       "id": 220,
       "term": "yard"
+    },
+    {
+      "id": 221,
+      "term": "hoa"
+    },
+    {
+      "id": 222,
+      "term": "home owners association"
+    },
+    {
+      "id": 223,
+      "term": "homeowner's association"
+    },
+    {
+      "id": 224,
+      "term": "home owner's association"
     }
   ]
 }
