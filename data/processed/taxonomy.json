@@ -1,20 +1,12 @@
 {
   "terms": [
     {
-      "id": 5,
-      "term": "primary suite"
-    },
-    {
       "id": 7,
       "term": "natural light"
     },
     {
       "id": 11,
       "term": "walk-in closet"
-    },
-    {
-      "id": 12,
-      "term": "heart of"
     },
     {
       "id": 13,
@@ -25,20 +17,12 @@
       "term": "dining area"
     },
     {
-      "id": 15,
-      "term": "for entertaining"
-    },
-    {
       "id": 17,
       "term": "steel appliances"
     },
     {
       "id": 18,
       "term": "family room"
-    },
-    {
-      "id": 19,
-      "term": "minutes from"
     },
     {
       "id": 21,
@@ -49,24 +33,8 @@
       "term": "laundry room"
     },
     {
-      "id": 25,
-      "term": "in heart"
-    },
-    {
-      "id": 28,
-      "term": "shopping dining"
-    },
-    {
-      "id": 30,
-      "term": "easy access"
-    },
-    {
-      "id": 31,
-      "term": "conveniently located"
-    },
-    {
       "id": 34,
-      "term": "views of"
+      "term": "views"
     },
     {
       "id": 36,
@@ -81,16 +49,8 @@
       "term": "granite countertops"
     },
     {
-      "id": 44,
-      "term": "open floor"
-    },
-    {
       "id": 47,
       "term": "move-in ready"
-    },
-    {
-      "id": 48,
-      "term": "thoughtfully designed"
     },
     {
       "id": 49,
@@ -99,18 +59,6 @@
     {
       "id": 51,
       "term": "soaking tub"
-    },
-    {
-      "id": 53,
-      "term": "primary bedroom"
-    },
-    {
-      "id": 54,
-      "term": "rare opportunity"
-    },
-    {
-      "id": 55,
-      "term": "living dining"
     },
     {
       "id": 58,
@@ -133,40 +81,16 @@
       "term": "covered patio"
     },
     {
-      "id": 78,
-      "term": "spacious living"
-    },
-    {
-      "id": 79,
-      "term": "two-car garage"
-    },
-    {
-      "id": 86,
-      "term": "main level"
-    },
-    {
-      "id": 88,
-      "term": "water heater"
+      "id": 80,
+      "term": "car garage"
     },
     {
       "id": 91,
       "term": "gourmet kitchen"
     },
     {
-      "id": 93,
-      "term": "direct access"
-    },
-    {
       "id": 94,
       "term": "additional bedrooms"
-    },
-    {
-      "id": 96,
-      "term": "in desirable"
-    },
-    {
-      "id": 97,
-      "term": "outdoor living"
     },
     {
       "id": 98,
@@ -174,7 +98,7 @@
     },
     {
       "id": 99,
-      "term": "cozy fireplace"
+      "term": "fireplace"
     },
     {
       "id": 102,
@@ -189,10 +113,6 @@
       "term": "formal dining"
     },
     {
-      "id": 109,
-      "term": "beautifully updated"
-    },
-    {
       "id": 110,
       "term": "fitness center"
     },
@@ -201,32 +121,12 @@
       "term": "private balcony"
     },
     {
-      "id": 112,
-      "term": "generously sized"
-    },
-    {
-      "id": 114,
-      "term": "spacious bedrooms"
-    },
-    {
-      "id": 117,
-      "term": "2-car garage"
-    },
-    {
-      "id": 119,
-      "term": "brand new"
-    },
-    {
       "id": 122,
       "term": "high ceilings"
     },
     {
       "id": 125,
       "term": "tile flooring"
-    },
-    {
-      "id": 126,
-      "term": "ideally located"
     },
     {
       "id": 127,
@@ -241,10 +141,6 @@
       "term": "pool"
     },
     {
-      "id": 131,
-      "term": "los angeles"
-    },
-    {
       "id": 132,
       "term": "bonus room"
     },
@@ -253,12 +149,8 @@
       "term": "solar panels"
     },
     {
-      "id": 141,
-      "term": "beautifully maintained"
-    },
-    {
       "id": 142,
-      "term": "private backyard"
+      "term": "backyard"
     },
     {
       "id": 143,
@@ -267,26 +159,6 @@
     {
       "id": 147,
       "term": "private patio"
-    },
-    {
-      "id": 149,
-      "term": "spacious primary"
-    },
-    {
-      "id": 150,
-      "term": "palm springs"
-    },
-    {
-      "id": 152,
-      "term": "walking distance"
-    },
-    {
-      "id": 155,
-      "term": "prime location"
-    },
-    {
-      "id": 156,
-      "term": "flows seamlessly"
     },
     {
       "id": 158,
@@ -299,18 +171,6 @@
     {
       "id": 160,
       "term": "tennis courts"
-    },
-    {
-      "id": 161,
-      "term": "freeway access"
-    },
-    {
-      "id": 164,
-      "term": "san diego"
-    },
-    {
-      "id": 166,
-      "term": "school district"
     },
     {
       "id": 169,
@@ -349,10 +209,6 @@
       "term": "french doors"
     },
     {
-      "id": 189,
-      "term": "views from"
-    },
-    {
       "id": 190,
       "term": "walk-in pantry"
     },
@@ -378,43 +234,11 @@
     },
     {
       "id": 199,
-      "term": "glass doors"
+      "term": "sliding glass doors"
     },
     {
       "id": 200,
       "term": "community amenities"
-    },
-    {
-      "id": 201,
-      "term": "1 bedroom"
-    },
-    {
-      "id": 202,
-      "term": "2 bedroom"
-    },
-    {
-      "id": 203,
-      "term": "3 bedroom"
-    },
-    {
-      "id": 204,
-      "term": "4 bedroom"
-    },
-    {
-      "id": 205,
-      "term": "5 bedroom"
-    },
-    {
-      "id": 206,
-      "term": "6 bedroom"
-    },
-    {
-      "id": 207,
-      "term": "1 Bedroom"
-    },
-    {
-      "id": 208,
-      "term": "2 Bedroom"
     },
     {
       "id": 209,
@@ -423,10 +247,6 @@
     {
       "id": 210,
       "term": "community amenities"
-    },
-    {
-      "id": 211,
-      "term": "3-car garage"
     },
     {
       "id": 212,
@@ -441,12 +261,24 @@
       "term": "office"
     },
     {
-      "id": 215,
-      "term": "community amenities"
-    },
-    {
       "id": 216,
       "term": "movie theater"
+    },
+    {
+      "id": 217,
+      "term": "furnished"
+    },
+    {
+      "id": 218,
+      "term": "air conditioning"
+    },
+    {
+      "id": 219,
+      "term": "A/C"
+    },
+    {
+      "id": 220,
+      "term": "yard"
     }
   ]
 }
