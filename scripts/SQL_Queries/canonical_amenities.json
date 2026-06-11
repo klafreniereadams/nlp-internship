@@ -8,7 +8,8 @@
     "walk in closet",
     "walk-in closet",
     "walk-in closets",
-    "walkin closet"
+    "walkin closet",
+    "walkin closets"
   ],
   "dining_area": [
     "dining area"
@@ -19,10 +20,14 @@
     "stainless-steel appliances"
   ],
   "family_room": [
-    "family room"
+    "family room",
+    "den"
   ],
   "spa": [
     "spa"
+  ],
+  "sauna": [
+    "sauna"
   ],
   "laundry_room": [
     "laundry room",
@@ -50,10 +55,14 @@
   ],
   "soaking_tub": [
     "soaking tub",
-    "soaking tubs"
+    "soaking tubs",
+    "jetted tub"
   ],
   "great_room": [
     "great room"
+  ],
+  "jacuzzi": [
+    "jacuzzi"
   ],
   "golf_course": [
     "golf course",
@@ -64,13 +73,17 @@
     "view of the mountains",
     "view of mountains"
   ],
-  "covered_patio": [
+  "patio": [
     "covered patio",
-    "covered patios"
+    "covered patios",
+    "veranda",
+    "private patio",
+    "private patios"
   ],
-  "car_garage": [
+  "garage": [
     "car garage",
-    "car garages"
+    "car garages",
+    "garage"
   ],
   "additional_bedrooms": [
     "additional bedrooms",
@@ -99,23 +112,35 @@
   "formal_dining": [
     "formal dining"
   ],
+  "quiet": [
+    "quiet"
+  ],
+  "private": [
+    "secluded",
+    "tucked away",
+    "tucked in",
+    "cul de sac",
+    "cul-de-sac"
+  ],
   "fitness_center": [
     "fitness center",
-    "gym"
+    "gym",
+    "weight room"
   ],
   "private_balcony": [
     "private balcony",
-    "private balconys"
-  ],
-  "high_ceilings": [
-    "high ceilings",
-    "high ceilingss"
+    "private balconies"
   ],
   "tile_flooring": [
-    "tile flooring"
+    "tile flooring",
+    "tile floors",
+    "tiled floor"
   ],
   "hardwood_floors": [
-    "hardwood floors"
+    "hardwood floors",
+    "oak floor",
+    "cedar floor",
+    "cherry floor"
   ],
   "center_island": [
     "center island",
@@ -139,12 +164,7 @@
     "backyard"
   ],
   "ceiling_fans": [
-    "ceiling fans",
-    "ceiling fanss"
-  ],
-  "private_patio": [
-    "private patio",
-    "private patios"
+    "ceiling fans"
   ],
   "updated_kitchen": [
     "updated kitchen",
@@ -166,6 +186,19 @@
     "dual sinks",
     "dual sinkss"
   ],
+  "stove": [
+    "gas stove",
+    "electric stove",
+    "electic cooktop",
+    "induction cooktop",
+    "induction stove"
+  ],
+  "oven": [
+    "oven",
+    "ovens",
+    "double ovens",
+    "induction oven"
+  ],
   "corner_lot": [
     "corner lot",
     "corner unit"
@@ -184,6 +217,9 @@
   "high_ceilings": [
     "vaulted ceilings",
     "soaring ceilings"
+  ],
+  "double_sinks": [
+    "double sinks"
   ],
   "resort_style_amenities": [
     "resort style amenities",
@@ -207,7 +243,7 @@
   ],
   "laminate_flooring": [
     "laminate flooring",
-    "laminate floorings"
+    "laminate floors"
   ],
   "chef_kitchen": [
     "chef kitchen",
@@ -234,7 +270,9 @@
   ],
   "office": [
     "office",
-    "home office"
+    "home office",
+    "study",
+    "studio"
   ],
   "movie_theater": [
     "movie theater",
