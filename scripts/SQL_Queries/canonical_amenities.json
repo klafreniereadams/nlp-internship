@@ -1,25 +1,22 @@
 {
-  "natural_light": [
+  "natural light": [
     "natural light",
     "sunny",
     "bright"
   ],
-  "walk_in_closet": [
+  "walk in closet": [
     "walk in closet",
     "walk-in closet",
     "walk-in closets",
     "walkin closet",
     "walkin closets"
   ],
-  "dining_area": [
-    "dining area"
-  ],
-  "steel_appliances": [
+  "steel appliances": [
     "steel appliances",
     "stainless steel appliances",
     "stainless-steel appliances"
   ],
-  "family_room": [
+  "family room": [
     "family room",
     "den"
   ],
@@ -29,49 +26,50 @@
   "sauna": [
     "sauna"
   ],
-  "laundry_room": [
+  "laundry room": [
     "laundry room",
     "laundry rooms"
   ],
-  "views": [
-    "views"
-  ],
-  "dining_room": [
+  "dining area": [
     "dining room",
-    "dining rooms"
+    "dining rooms",
+    "dining area"
   ],
   "countertops": [
     "granite countertops",
     "quartz countertopss",
     "marble countertops"
   ],
-  "move_in_ready": [
+  "move in ready": [
     "move in ready",
     "move-in ready",
     "movein ready"
   ],
-  "recessed_lighting": [
+  "recessed lighting": [
     "recessed lighting"
   ],
-  "soaking_tub": [
+  "soaking tub": [
     "soaking tub",
     "soaking tubs",
     "jetted tub"
   ],
-  "great_room": [
+  "great room": [
     "great room"
   ],
   "jacuzzi": [
     "jacuzzi"
   ],
-  "golf_course": [
+  "golf course": [
     "golf course",
     "golf courses"
   ],
-  "mountain_views": [
+  "views": [
     "mountain views",
     "view of the mountains",
-    "view of mountains"
+    "view of mountains",
+    "ocean views",
+    "view of the ocean",
+    "view of ocean"
   ],
   "patio": [
     "covered patio",
@@ -85,11 +83,13 @@
     "car garages",
     "garage"
   ],
-  "additional_bedrooms": [
+  "additional bedrooms": [
     "additional bedrooms",
-    "extra bedrooms"
+    "extra bedrooms",
+    "guest room",
+    "guest rooms"
   ],
-  "gated_community": [
+  "gated community": [
     "gated community"
   ],
   "fireplace": [
@@ -99,17 +99,17 @@
     "cozy fireplace",
     "electric fireplace"
   ],
-  "washer_dryer": [
+  "washer dryer": [
     "washer dryer",
     "washer and dryer"
   ],
-  "walk_in_shower": [
+  "walk in shower": [
     "walk in shower",
     "walk-in shower",
     "walk-in showers",
     "walkin shower"
   ],
-  "formal_dining": [
+  "formal dining": [
     "formal dining"
   ],
   "quiet": [
@@ -122,27 +122,28 @@
     "cul de sac",
     "cul-de-sac"
   ],
-  "fitness_center": [
+  "fitness center": [
     "fitness center",
     "gym",
-    "weight room"
+    "weight room",
+    "personal gym"
   ],
-  "private_balcony": [
+  "private balcony": [
     "private balcony",
     "private balconies"
   ],
-  "tile_flooring": [
+  "tile flooring": [
     "tile flooring",
     "tile floors",
     "tiled floor"
   ],
-  "hardwood_floors": [
+  "hardwood floors": [
     "hardwood floors",
     "oak floor",
     "cedar floor",
     "cherry floor"
   ],
-  "center_island": [
+  "center island": [
     "center island",
     "kitchen island"
   ],
@@ -152,37 +153,38 @@
     "lap pool",
     "infinity pool"
   ],
-  "bonus_room": [
+  "bonus room": [
     "bonus room",
     "bonus rooms"
   ],
-  "solar_panels": [
+  "solar panels": [
     "solar panels",
     "solar power"
   ],
   "backyard": [
     "backyard"
   ],
-  "ceiling_fans": [
+  "ceiling fans": [
     "ceiling fans"
   ],
-  "updated_kitchen": [
+  "updated kitchen": [
     "updated kitchen",
     "remodeled kitchen"
   ],
-  "custom_cabinetry": [
+  "custom cabinetry": [
     "custom cabinetry",
-    "custom cabinetrys"
+    "custom cabinetrys",
+    "custom cabinets"
   ],
-  "tennis_courts": [
+  "tennis courts": [
     "tennis courts",
     "tennis courtss"
   ],
-  "country_club": [
+  "country club": [
     "country club",
     "country clubs"
   ],
-  "dual_sinks": [
+  "dual sinks": [
     "dual sinks",
     "dual sinkss"
   ],
@@ -199,72 +201,73 @@
     "double ovens",
     "induction oven"
   ],
-  "corner_lot": [
+  "corner lot": [
     "corner lot",
     "corner unit"
   ],
-  "breakfast_bar": [
+  "breakfast bar": [
     "breakfast bar",
     "breakfast nook"
   ],
-  "walk_in": [
+  "walk in": [
     "walk in",
     "walk-in"
   ],
-  "sliding_glass": [
+  "sliding glass": [
     "sliding glass"
   ],
-  "high_ceilings": [
+  "high ceilings": [
     "vaulted ceilings",
     "soaring ceilings"
   ],
-  "double_sinks": [
+  "double sinks": [
     "double sinks"
   ],
-  "resort_style_amenities": [
+  "resort style amenities": [
     "resort style amenities",
     "resort-style amenities"
   ],
-  "french_doors": [
+  "french doors": [
     "french doors"
   ],
-  "walk_in_pantry": [
+  "walk in pantry": [
     "walk in pantry",
     "walk-in pantry",
     "walk-in pantries",
     "walk in pantries"
   ],
-  "attached_garage": [
+  "attached garage": [
     "attached garage",
     "attached garages"
   ],
-  "fruit_trees": [
-    "fruit trees"
+  "fruit trees": [
+    "fruit trees",
+    "orchard"
   ],
-  "laminate_flooring": [
+  "laminate flooring": [
     "laminate flooring",
     "laminate floors"
   ],
-  "chef_kitchen": [
+  "chef kitchen": [
     "chef kitchen",
     "chef's kitchen",
     "gourmet kitchen"
   ],
-  "sliding_glass_doors": [
+  "sliding glass doors": [
     "sliding glass doors",
     "sliding glass doorss"
   ],
-  "community_amenities": [
+  "community amenities": [
     "community amenities",
     "community amenitiess"
   ],
   "garden": [
     "garden"
   ],
-  "rv_access": [
+  "rv access": [
     "rv access"
   ],
-  "ev_charging": [
+  "ev charging": [
     "ev charging",
     "ev charger"
   ],
@@ -274,7 +277,7 @@
     "study",
     "studio"
   ],
-  "movie_theater": [
+  "movie theater": [
     "movie theater",
     "home theater",
     "movie theatre",
@@ -284,7 +287,7 @@
     "furnished",
     "fully furnished"
   ],
-  "air_conditioning": [
+  "air conditioning": [
     "air conditioning",
     "A/C"
   ],
@@ -303,5 +306,23 @@
     "home-owner's association",
     "homeowner's association",
     "homeowners association"
+  ],
+  "mother-in-law suite": [
+    "mother-in-law suite",
+    "mother in-law suite",
+    "mother in law suite",
+    "MIL suite"
+  ],
+  "guest house": [
+    "guest house",
+    "guesthouse",
+    "guest houses",
+    "guesthouses"
+  ],
+  "sun room": [
+    "sun room",
+    "sunroom",
+    "sun rooms",
+    "sunrooms"
   ]
 }

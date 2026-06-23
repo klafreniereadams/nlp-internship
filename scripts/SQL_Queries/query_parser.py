@@ -5,29 +5,267 @@ import re
 # injection-safe SQL practices following the guidelines at 
 # https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
 
+
 class QueryParser:
+    def __init__(self, amenities_path="scripts/SQL_Queries/canonical_amenities.json"):
+        with open(amenities_path) as f:
+            self.amenities = json.load(f)
+
+        self.amenity_lookup = {}
+        for canonical, variants in self.amenities.items():
+            for phrase in variants:
+                self.amenity_lookup[phrase.lower()] = canonical
+
+        # Build a single combined regex for all amenity phrases
+        escaped = [re.escape(p) for p in self.amenity_lookup.keys()]
+        escaped.sort(key=len, reverse=True)
+        self.amenity_regex = re.compile(r'\b(?:' + "|".join(escaped) + r')\b', re.I)
+    
     def parse(self, query):
         filters = {}
-        # Price patterns
-        if match := re.search(r'under\s+\$?(\d+)([km]?)', query, re.I):
+
+        # ---------------------------------------------
+        # Price parsing logic
+        # ---------------------------------------------
+        # "between min and max" price
+        if match := re.search(
+            r'between\s+\$?(\d+)([km]?)\s+and\s+\$?(\d+)([km]?)',
+            query,
+            re.I
+        ):
+            low = self._parse_number(match.group(1), match.group(2))
+            high = self._parse_number(match.group(3), match.group(4))
+            filters['price_range'] = (low, high)
+
+        # "min - max" OR "min to max" price
+        elif match := re.search(
+            r'\$?(\d+)([km]?)\s*(?:-|to)\s*\$?(\d+)([km]?)',
+            query,
+            re.I
+        ):
+            low = self._parse_number(match.group(1), match.group(2))
+            high = self._parse_number(match.group(3), match.group(4))
+            filters['price_range'] = (low, high)
+
+        # "over/above/at least/more than" price
+        elif match := re.search(
+            r'(?:over|above|at least|more than)\s+\$?(\d+)([km]?)',
+            query,
+            re.I
+        ):
+            filters['price_min'] = self._parse_number(match.group(1), match.group(2))
+
+        # "under/below/at most" price
+        elif match := re.search(
+            r'(?:under|below|at most)\s+\$?(\d+)([km]?)',
+            query,
+            re.I
+        ):
             filters['price_max'] = self._parse_number(match.group(1), match.group(2))
+
+        # "around" price 
+        # I am heuristically defining this as allowing 100k above or below stated price
+        if match := re.search(
+            r'(?:around|about|approximately|roughly)\s+\$?(\d+)([km]?)',
+            query,
+            re.I
+        ):
+            center = self._parse_number(match.group(1), match.group(2))
+            low = max(0, center - 100_000)
+            high = center + 100_000
+            filters['price_range'] = (low, high)
+
             
         # Bedroom patterns
         if match := re.search(r'(\d+)\+?\s*(?:bed|br)', query, re.I):
             filters['bedrooms_min' if '+' in match.group(0) else 'bedrooms'] = int(match.group(1))
 
+        # Bathroom patterns
+        if match := re.search(r'(\d+)\+?\s*(?:bath|ba)', query, re.I):
+            filters['bathrooms_min' if '+' in match.group(0) else 'bathrooms'] = int(match.group(1))
+
+
+        # City patterns
+        # allows for optional cardinal or ordinal direction + 1–3 word city name
+        if match := re.search(
+            r'\b(?:in|near|around|outside|close to)\s+'
+            r'(?:(north|northeast|east|southeast|south|southwest|west|northwest)\s+)?'
+            r'([A-Za-z]+(?:\s+[A-Za-z]+){0,2})'
+            r'(?=\s+(?:under|over|between|\d+|bed|bath|br|$))',
+            query,
+            re.I
+        ):
+            #direction = match.group(1)
+            city = match.group(2).title()
+
+            # Base city assignment
+            filters['city'] = city
+            #---------------------------------------------------------------------------
+            # removing for now because redundant, but can put back in if later want to keep directions
+            # Normalizes direction and city name to title case
+            #if direction:
+                #direction = direction.title()
+            #city = city.title()
+    
+            #filters['city'] = f"{direction} {city}".strip()
+            #---------------------------------------------------------------------------
+
+             # another option is for search logic to accept directional cities as variants of the base city
+            # in order to not erroneously exlude "Fresno" results from a "North Fresno" search, for example.
+            # This option may be dependent on the consistency of listing specificity.
+
+            # Normalize directional cities to base city
+            directions = {
+                "North", "Northeast", "East", "Southeast",
+                "South", "Southwest", "West", "Northwest"
+            }
+            parts = filters['city'].split()
+            if parts[0] in directions and len(parts) > 1:
+                filters['city'] = " ".join(parts[1:])
+
+        # could this someday handle proximity queries from the user? Like "within 1 hour from LA" or 
+        # "less than 20 miles from Sacramento"?
+        # Would this be dependent on the strict/fuzzy calculation of the listing host's radius map tool?
+        # Other workarounds?
+
         return filters
     
+    # ---------------------------------------------
+    # SQL query generation
+    # ---------------------------------------------   
     def to_sql(self, filters):
         conditions = []
         params = []
 
+        # Price range: ("price_min", "price_max") stored as a tuple
+        if 'price_range' in filters:
+            low, high = filters['price_range']
+            conditions.append('L_SystemPrice BETWEEN %s AND %s')
+            params.extend([low, high])
+
+        # Price minimum
+        if 'price_min' in filters:
+            conditions.append('L_SystemPrice >= %s')
+            params.append(filters['price_min'])
+
+        # Price maximum
         if 'price_max' in filters:
             conditions.append('L_SystemPrice <= %s')
             params.append(filters['price_max'])
+
+        # Bedrooms exact
         if 'bedrooms' in filters:
-            conditions.append('L_Keyword2 = %s')
-            params.append(filters['bedrooms'])
+            b = filters['bedrooms']
+            conditions.append(
+                "("
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR"
+                "L_Remarks ILIKE %s OR"
+                "L_Remarks ILIKE %s"
+                ")"
+            )
+            params.extend([
+                f"%{b} bed%",
+                f"%{b} beds%",
+                f"%{b}br%",
+                f"%{b} br%",
+                f"%{b}-bed%",
+                f"%{b} bdr%",
+                f"%{b} bedrooms"
+            ])
+        # Bedrooms minimum
+        if 'bedrooms_min' in filters:
+            b = filters['bedrooms_min']
+            conditions.append(
+                "("
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s"
+                ")"
+            )
+            params.extend([
+                f"%{b} bed%",
+                f"%{b} beds%",
+                f"%{b}br%",
+                f"%{b} br%",
+                f"%{b}-bed%",
+                f"%{b} bdr%",
+                f"%{b} bedrooms"
+            ])
+    
+        # Bathrooms exact
+        if 'bathrooms' in filters:
+            ba = filters['bathrooms']
+            conditions.append(
+                "("
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s "
+                ")"
+            )
+            params.extend([
+                f"%{ba} bath%",
+                f"%{ba} baths%",
+                f"%{ba}ba%",
+                f"%{ba} ba%",
+                f"%{ba}-bath%",
+                f"%{ba} bth%",
+                f"%s{ba} bathrooms"
+            ])
+        # Bathrooms minimum
+        if 'bathrooms_min' in filters:
+            ba = filters['bathrooms_min']
+            conditions.append(
+                "("
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s OR "
+                "L_Remarks ILIKE %s "
+                ")"
+            )
+            params.extend([
+                f"%{ba} bath%",
+                f"%{ba} baths%",
+                f"%{ba}ba%",
+                f"%{ba} ba%",
+                f"%{ba}-bath%",
+                f"%{ba} bth%",
+                f"%s{ba} bathrooms"
+            ])
+
+        # City # without sensitivity to ordinal/cardinal details
+        if 'city' in filters:
+            conditions.append('L_City = %s')
+            params.append(filters['city'])
+
+        # Amenities (canonical_amenities.json)
+        if 'amenities' in filters:
+            for canonical in filters['amenities']:
+                variants = self.amenities.get(canonical, [])
+
+                # Build OR group for all variants of this amenity
+                or_clauses = []
+                for variant in variants:
+                    or_clauses.append("L_Remarks ILIKE %s")
+                    params.append(f"%{variant}%")
+
+                # Wrap OR group in parentheses
+                if or_clauses:
+                    conditions.append("(" + " OR ".join(or_clauses) + ")")
 
         where_clause = ' AND '.join(conditions)
         return f"SELECT * FROM rets_property WHERE {where_clause}", params
@@ -44,7 +282,9 @@ class SchemaValidator:
 
     def validate_query(self, filters):
         errors = []
+        
         # Check city exists in database
+        # list of cities pulled from whatever cities are present in the rets_property L_City column
         if 'city' in filters:
             if filters['city'] not in self.valid_cities:
                 errors.append(f"City '{filters['city']}' not found in database")
