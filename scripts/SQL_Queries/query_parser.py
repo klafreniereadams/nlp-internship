@@ -1,5 +1,33 @@
 import json
 import re
+import mysql.connector
+
+# Connect to DB
+conn = mysql.connector.connect(
+    host='localhost',
+    user='root',
+    password='root',
+    database='real_estate'
+)
+
+# Create parser + validator
+parser = QueryParser()
+validator = SchemaValidator(db_conn=conn)
+
+# Parse a query
+filters = parser.parse("3 bed in Portland under 500k")
+
+# Validate
+valid, errors = validator.validate_query(filters)
+
+if not valid:
+    print("Errors:", errors)
+else:
+    sql, params = parser.to_sql(filters)
+    print(sql)
+    print(params)
+
+conn.close()
 
 # code scaffolding provided by IDX Exchange
 # injection-safe SQL practices following the guidelines at 
@@ -21,6 +49,64 @@ class QueryParser:
         escaped.sort(key=len, reverse=True)
         self.amenity_regex = re.compile(r'\b(?:' + "|".join(escaped) + r')\b', re.I)
     
+    def _parse_number(self, num, suffix):
+        n = int(num)
+        if suffix.lower() == "k":
+            return n * 1_000
+        if suffix.lower() == "m":
+            return n * 1_000_000
+        return n
+
+    # ---------------------------------------------
+    # Amenity parsing logic setup
+    # ---------------------------------------------
+    def _parse_amenity_logic(self, query):
+        q = query.lower()
+
+        # First normalize any instance of "but no" --> "and no"
+        q = re.sub(r'\bbut no\b', 'and no', q)
+
+        # Split on AND/OR while keeping operators
+        raw_parts = re.split(r'\b(and|or)\b', q)
+        parts = [p.strip() for p in raw_parts if p.strip()]
+        
+        clauses = []
+
+        # operand, and, entity
+        current_group = {"op": "and", "items": []}  # default group is AND
+
+        def flush_group():
+            if current_group["items"]:
+                clauses.append(current_group.copy())
+                current_group["items"] = []
+
+        for token in parts:
+            if token in ("and", "or"):
+                # If 'OR' occurs, flush current 'AND' group and start a new 'OR' group
+                if token == "or":
+                    flush_group()
+                    current_group["op"] = "or"
+                else:
+                    # 'AND' just continues the current group
+                    current_group["op"] = "and"
+                continue
+
+            # Detect negation
+            neg = bool(re.search(r'\b(no|not|without)\b', token))
+
+            # Extract amenities
+            found = self.amenity_regex.findall(token)
+            for f in found:
+                canonical = self.amenity_lookup.get(f.lower())
+                if canonical:
+                    if neg:
+                        current_group["items"].append({"not": canonical})
+                    else:
+                        current_group["items"].append({"amenity": canonical})
+        
+        flush_group()
+        return clauses
+
     def parse(self, query):
         filters = {}
 
@@ -128,6 +214,14 @@ class QueryParser:
         # Would this be dependent on the strict/fuzzy calculation of the listing host's radius map tool?
         # Other workarounds?
 
+        # ---------------------------------------------
+        # Amenity logic (AND / OR / NOT)
+        # ---------------------------------------------
+        amenity_clauses = self._parse_amenity_logic(query)
+        if amenity_clauses:
+            filters["amenity_logic"] = amenity_clauses
+
+
         return filters
     
     # ---------------------------------------------
@@ -221,7 +315,7 @@ class QueryParser:
                 f"%{ba} ba%",
                 f"%{ba}-bath%",
                 f"%{ba} bth%",
-                f"%s{ba} bathrooms"
+                f"%{ba} bathrooms%"
             ])
         # Bathrooms minimum
         if 'bathrooms_min' in filters:
@@ -244,7 +338,7 @@ class QueryParser:
                 f"%{ba} ba%",
                 f"%{ba}-bath%",
                 f"%{ba} bth%",
-                f"%s{ba} bathrooms"
+                f"%{ba} bathrooms%"
             ])
 
         # City # without sensitivity to ordinal/cardinal details
@@ -252,20 +346,56 @@ class QueryParser:
             conditions.append('L_City = %s')
             params.append(filters['city'])
 
+        # ---------------------------------------------
         # Amenities (canonical_amenities.json)
-        if 'amenities' in filters:
-            for canonical in filters['amenities']:
-                variants = self.amenities.get(canonical, [])
+        # Handles boolean operator logic
+        # ---------------------------------------------
+        if 'amenity_logic' in filters:
+            groups = filters['amenity_logic']
+            group_sql_fragments = []
 
-                # Build OR group for all variants of this amenity
-                or_clauses = []
-                for variant in variants:
-                    or_clauses.append("L_Remarks ILIKE %s")
-                    params.append(f"%{variant}%")
+            for group in groups:
+                op = group["op"]  # "and" or "or"
+                items = group["items"]
 
-                # Wrap OR group in parentheses
-                if or_clauses:
-                    conditions.append("(" + " OR ".join(or_clauses) + ")")
+                item_sql = []
+
+                for item in items:
+                    # Positive amenity
+                    if "amenity" in item:
+                        canonical = item["amenity"]
+                        variants = self.amenities.get(canonical, [])
+
+                        ors = []
+                        for v in variants:
+                            ors.append("L_Remarks ILIKE %s")
+                            params.append(f"%{v}%")
+
+                        item_sql.append("(" + " OR ".join(ors) + ")")
+
+                    # Negated amenity
+                    elif "not" in item:
+                        canonical = item["not"]
+                        variants = self.amenities.get(canonical, [])
+
+                        ands = []
+                        for v in variants:
+                            ands.append("L_Remarks NOT ILIKE %s")
+                            params.append(f"%{v}%")
+
+                        item_sql.append("(" + " AND ".join(ands) + ")")
+
+                # Join items inside the group
+                if op == "and":
+                    group_sql_fragments.append("(" + " AND ".join(item_sql) + ")")
+                else:  # op == "or"
+                    group_sql_fragments.append("(" + " OR ".join(item_sql) + ")")
+
+            # Now join all groups together with AND (top-level)
+            # Example: (A AND B) AND (C OR D)
+            if group_sql_fragments:
+                conditions.append("(" + " AND ".join(group_sql_fragments) + ")")
+
 
         where_clause = ' AND '.join(conditions)
         return f"SELECT * FROM rets_property WHERE {where_clause}", params
@@ -279,6 +409,17 @@ class SchemaValidator:
         with open(schema_path) as f:
             self.schema = json.load(f)
         self.valid_cities = self._load_valid_cities()
+
+    # Load valid cities (all those present in L_City column of rets_property DB)
+    def _load_valid_cities(self):
+        if not self.db_conn:
+                return set()
+
+        with self.db_conn.cursor() as cur:
+            cur.execute("SELECT DISTINCT L_City FROM rets_property;")
+            rows = cur.fetchall()
+
+        return {row[0] for row in rows if row[0]}
 
     def validate_query(self, filters):
         errors = []
