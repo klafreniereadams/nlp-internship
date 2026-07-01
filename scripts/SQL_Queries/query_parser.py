@@ -1,38 +1,9 @@
 import json
 import re
-import mysql.connector
-
-# Connect to DB
-conn = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    password='root',
-    database='real_estate'
-)
-
-# Create parser + validator
-parser = QueryParser()
-validator = SchemaValidator(db_conn=conn)
-
-# Parse a query
-filters = parser.parse("3 bed in Portland under 500k")
-
-# Validate
-valid, errors = validator.validate_query(filters)
-
-if not valid:
-    print("Errors:", errors)
-else:
-    sql, params = parser.to_sql(filters)
-    print(sql)
-    print(params)
-
-conn.close()
 
 # code scaffolding provided by IDX Exchange
 # injection-safe SQL practices following the guidelines at 
 # https://cheatsheetseries.owasp.org/cheatsheets/SQL_Injection_Prevention_Cheat_Sheet.html
-
 
 class QueryParser:
     def __init__(self, amenities_path="scripts/SQL_Queries/canonical_amenities.json"):
@@ -405,15 +376,19 @@ class QueryParser:
 # ------------------------------------------------------------------------
 
 class SchemaValidator:
-    def __init__(self, schema_path='data/schema.json'):
-        with open(schema_path) as f:
-            self.schema = json.load(f)
+    def __init__(self, db_conn):
+        self.db_conn = db_conn
+
+        # this caches the cities after loading the first time
         self.valid_cities = self._load_valid_cities()
 
-    # Load valid cities (all those present in L_City column of rets_property DB)
+        # later, can uncomment this out to refresh the cache (i.e. if city list changes)
+        # def refresh(self):
+        #     self.valid_cities = self._load_valid_cities()
+
     def _load_valid_cities(self):
         if not self.db_conn:
-                return set()
+            return set()
 
         with self.db_conn.cursor() as cur:
             cur.execute("SELECT DISTINCT L_City FROM rets_property;")
@@ -440,14 +415,3 @@ class SchemaValidator:
             if filters['bedrooms'] < 1 or filters['bedrooms'] > 10:
                 errors.append(f"Bedroom count {filters['bedrooms']} seems invalid")
         return len(errors) == 0, errors
-
-# Usage:
-parser = QueryParser()
-validator = SchemaValidator()
-filters = parser.parse("3 bed in Portland under 500k")
-valid, errors = validator.validate_query(filters)
-if not valid:
-    print(f"Query validation errors: {errors}")
-    # Return helpful message to user
-else:
-    sql, params = parser.to_sql(filters)
