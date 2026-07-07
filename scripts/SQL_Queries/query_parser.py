@@ -34,47 +34,63 @@ class QueryParser:
     def _parse_amenity_logic(self, query):
         q = query.lower()
 
-        # First normalize any instance of "but no" --> "and no"
+        # Normalize "but no" → "and no"
         q = re.sub(r'\bbut no\b', 'and no', q)
 
         # Split on AND/OR while keeping operators
         raw_parts = re.split(r'\b(and|or)\b', q)
         parts = [p.strip() for p in raw_parts if p.strip()]
-        
-        clauses = []
 
-        # operand, and, entity
-        current_group = {"op": "and", "items": []}  # default group is AND
+        clauses = []
+        current_group = {"op": "and", "items": []}
 
         def flush_group():
             if current_group["items"]:
                 clauses.append(current_group.copy())
                 current_group["items"] = []
 
+        pending_OR = False
+
         for token in parts:
             if token in ("and", "or"):
-                # If 'OR' occurs, flush current 'AND' group and start a new 'OR' group
+                has_negation = any("not" in item for item in current_group["items"])
+                
                 if token == "or":
-                    flush_group()
-                    current_group["op"] = "or"
-                else:
-                    # 'AND' just continues the current group
-                    current_group["op"] = "and"
+                    if has_negation:
+                    # Makes negation bind more tightly than OR. defines groups correctly before flushing.
+                    # allows for "house with no hoa or pool" --> 'no hoa', 'no pool'
+                    # then creates a new OR group after this one
+                        pending_OR = True
+                        continue
+                    else:
+                        flush_group()
+                        current_group["op"] = "or"
+                        continue
+                
+                # AND operator case
+                current_group["op"] = "and"
                 continue
 
             # Detect negation
             neg = bool(re.search(r'\b(no|not|without)\b', token))
 
-            # Extract amenities
+            # Extract canonical amenities
             found = self.amenity_regex.findall(token)
             for f in found:
                 canonical = self.amenity_lookup.get(f.lower())
                 if canonical:
-                    if neg:
+                    if neg or pending_OR:
+                        # If OR-after-negation is pending, treat next amenity as negated
                         current_group["items"].append({"not": canonical})
                     else:
                         current_group["items"].append({"amenity": canonical})
-        
+
+            # If OR-after-negation was pending, now we can split
+            if pending_OR:
+                clauses.append(current_group.copy())
+                current_group = {"op": "or", "items": []}
+                pending_OR = False
+
         flush_group()
         return clauses
 
@@ -147,8 +163,8 @@ class QueryParser:
         if match := re.search(
             r'\b(?:in|near|around|outside|close to)\s+'
             r'(?:(north|northeast|east|southeast|south|southwest|west|northwest)\s+)?'
-            r'([A-Za-z]+(?:\s+[A-Za-z]+){0,2})'
-            r'(?=\s+(?:under|over|between|\d+|bed|bath|br|$))',
+            # stop city capture BEFORE price/bed/bath keywords
+            r'([A-Za-z]+(?:\s+[A-Za-z]+){0,2})(?=\s*(?:under|over|between|below|above|at least|at most|more than|\d+\s*(?:bed|bath|br|ba)|$))',
             query,
             re.I
         ):
@@ -191,7 +207,6 @@ class QueryParser:
         amenity_clauses = self._parse_amenity_logic(query)
         if amenity_clauses:
             filters["amenity_logic"] = amenity_clauses
-
 
         return filters
     
@@ -413,5 +428,21 @@ class SchemaValidator:
         # Check bedroom count
         if 'bedrooms' in filters:
             if filters['bedrooms'] < 1 or filters['bedrooms'] > 10:
-                errors.append(f"Bedroom count {filters['bedrooms']} seems invalid")
+                errors.append(f"Bedroom count of {filters['bedrooms']} seems invalid")
+    
+        # Check minimum bedroom count
+        if 'bedrooms_min' in filters:
+            if filters['bedrooms_min'] < 1 or filters['bedrooms_min'] > 10:
+                errors.append(f"Minimum bedroom number of {filters['bedrooms_min']} seems invalid")
+    
+        # Check bathroom count
+        if 'bathrooms' in filters:
+            if filters['bathrooms'] < 1 or filters['bathrooms'] > 10:
+                errors.append(f"Bathroom count of {filters['bathrooms']} seems invalid")
+    
+        # Check minimum bathroom count
+        if 'bathrooms_min' in filters:
+            if filters['bathrooms_min'] < 1 or filters['bathrooms_min'] > 10:
+                errors.append(f"Minimum bathroom number of {filters['bathrooms_min']} seems invalid")
+            
         return len(errors) == 0, errors

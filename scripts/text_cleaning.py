@@ -173,18 +173,20 @@ class TextCleaner:
 # Use to guide cleaning strategy:
 cleaner = TextCleaner()
 profile = cleaner.profile_column(df, 'remarks')
-print()
-print(f"HTML tags found in {profile['has_html']} listings")
-print()
-print(f"Common abbreviations: {profile['common_abbreviations']}")
-print()
-print(f"Top unigrams: {profile['common_terms']['unigrams']}")
-print()
-print(f"Top bigrams: {profile['common_terms']['bigrams']}")
-print()
-print(f"Top trigrams: {profile['common_terms']['trigrams']}")
 
-print("normalize_prices loaded from:", __file__)
+if __name__ == "__main__":
+    print()
+    print(f"HTML tags found in {profile['has_html']} listings")
+    print()
+    print(f"Common abbreviations: {profile['common_abbreviations']}")
+    print()
+    print(f"Top unigrams: {profile['common_terms']['unigrams']}")
+    print()
+    print(f"Top bigrams: {profile['common_terms']['bigrams']}")
+    print()
+    print(f"Top trigrams: {profile['common_terms']['trigrams']}")
+
+    print("normalize_prices loaded from:", __file__)
 
 # Testing cleaner functionality
 def test_price_normalization():

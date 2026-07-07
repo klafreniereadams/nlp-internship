@@ -211,11 +211,12 @@ def test_amenity_pool_or_garage_or_yard():
 def test_amenity_no_hoa_or_pool():
     f = parser.parse("house with no hoa or pool")
     logic = f["amenity_logic"]
-    # first group: negation
+    # first group: both negated
     assert {"not": "hoa"} in logic[0]["items"]
-    # second group: OR group
-    assert logic[1]["op"] == "or"
-    assert {"amenity": "pool"} in logic[1]["items"]
+    assert {"not": "pool"} in logic[0]["items"]
+    # there should be ONLY ONE group
+    assert len(logic) == 1
+
 
 # 31. Amenity: NOT + AND chain
 def test_amenity_no_pool_and_garage():
@@ -229,8 +230,7 @@ def test_amenity_no_yard_or_pool():
     f = parser.parse("house with no yard or pool")
     logic = f["amenity_logic"]
     assert {"not": "yard"} in logic[0]["items"]
-    assert logic[1]["op"] == "or"
-    assert {"amenity": "pool"} in logic[1]["items"]
+    assert {"not": "pool"} in logic[0]["items"]
 
 # 33. Amenity: triple negation
 def test_amenity_no_pool_no_garage_no_yard():
@@ -282,19 +282,26 @@ def test_city_outside_keyword():
 def test_amenity_pool_or_no_hoa():
     f = parser.parse("house with pool or no hoa")
     logic = f["amenity_logic"]
+    # first group: pool
+    assert {"amenity": "pool"} in logic[0]["items"]
+    # second group: OR group with negation
     assert logic[1]["op"] == "or"
-    assert {"amenity": "pool"} in logic[1]["items"]
     assert {"not": "hoa"} in logic[1]["items"]
 
 # 42. Amenity: AND + OR + NOT mix
 def test_amenity_pool_and_no_yard_or_garage():
     f = parser.parse("house with pool and no yard or garage")
     logic = f["amenity_logic"]
+    # single AND group
     assert logic[0]["op"] == "and"
+    # yes pool
     assert {"amenity": "pool"} in logic[0]["items"]
+    # no yard no garage
     assert {"not": "yard"} in logic[0]["items"]
-    assert logic[1]["op"] == "or"
-    assert {"amenity": "garage"} in logic[1]["items"]
+    assert {"not": "garage"} in logic[0]["items"]
+
+    # no OR group should exist
+    assert len(logic) == 1
 
 # 43. Price: million suffix
 def test_price_m_suffix():
@@ -341,4 +348,3 @@ def test_city_mixed_case_input():
     f = parser.parse("4 bed in SaN dIeGo")
     valid, errors = validator.validate_query(f)
     assert valid
-
