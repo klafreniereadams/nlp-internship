@@ -16,13 +16,16 @@ import pandas as pd
 import requests
 from semantic_search import SemanticSearcher
 from BM_25_search import BM25Searcher
-from scipy.stats import spearmanr, kendalltau
+from scipy.stats import spearmanr
 from tqdm import tqdm
+from pathlib import Path
+from IPython.display import display
 
 # Specify paths
-PROJECT_ROOT = os.path.abspath(os.path.join(os.getcwd(), "..", ".."))
-REMARKS_PATH = os.path.join(PROJECT_ROOT, "data/processed/listing_remarks.csv")
-EMB_PATH = os.path.join(PROJECT_ROOT, "data/processed/remarks_embeddings.npy")
+SCRIPT_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = SCRIPT_DIR.parent.parent
+REMARKS_PATH = PROJECT_ROOT / "data" / "processed" / "listing_remarks.csv"
+EMB_PATH = PROJECT_ROOT / "data" / "processed" / "remarks_embeddings.npy"
 
 # Instantiate both searchers
 searcher = SemanticSearcher(remarks_path=REMARKS_PATH, emb_path=EMB_PATH)
@@ -97,65 +100,9 @@ comparison_df
 # A strict comparison of latency in ms does not give us real insight into the usefulness of BM25 vs our semantic searcher. 
 # A human user will not experience a marked difference between 1 and 399 ms. 
 # Where I expect a semantic searcher to really improve a user's experience is in the flexibility and 
-# relevance of search results. I compare those more fully below.
+# relevance of search results. I compare those more fully in comparison_visualization.ipynb
 # -------------------------------------------------------------------------------------------------------
 
-def show_result(text, score):
-    html = f"""
-    <div style='max-width:700px; white-space:normal; line-height:1.4; margin-bottom:1em;'>
-        <b>Score:</b> {score:.4f}<br>
-        {text}
-    </div>
-    """
-    display(HTML(html))
 
-for q in queries:
-    print("\n" + "="*80)
-    print(f"QUERY: {q}\n")
-
-    bm25_res = bm25.search(q, top_k=2)
-    sem_res = searcher.search(q, top_k=2)
-
-    print("BM25 RESULTS:")
-    for text, score in bm25_res:
-        show_result(text, score)
-
-    print("SEMANTIC RESULTS:")
-    for text, score in sem_res:
-        show_result(text, score)
-
-# -------------------------------------------------------------------------------------------------------
-# A quick Spearman evaluatation and look at overlapping results to heuristically compare 
-# top 50 query-relevance pairs of each search method
-# -------------------------------------------------------------------------------------------------------
-
-# Spearman
-def rank_correlation(bm25_ids, semantic_ids):
-    # Build a mapping from listing ID → rank
-    bm25_rank = {lid: i for i, lid in enumerate(bm25_ids)}
-    semantic_rank = {lid: i for i, lid in enumerate(semantic_ids)}
-
-    # Only compare items that appear in BOTH lists
-    overlap = list(set(bm25_ids) & set(semantic_ids))
-
-    bm25_positions = [bm25_rank[lid] for lid in overlap]
-    semantic_positions = [semantic_rank[lid] for lid in overlap]
-
-    spearman = spearmanr(bm25_positions, semantic_positions).correlation
-
-    return spearman, overlap
-
-# Overlap
-def overlap_metrics(bm25_ids, semantic_ids):
-    bm25_set = set(bm25_ids)
-    semantic_set = set(semantic_ids)
-
-    intersection = bm25_set & semantic_set
-    union = bm25_set | semantic_set
-
-    jaccard = len(intersection) / len(union)
-    overlap_count = len(intersection)
-
-    return jaccard, overlap_count, intersection
-
-overlap_matrics()
+# PIck up here:
+# .ipynb is a nightmare. Try converting display html output as just numbers
