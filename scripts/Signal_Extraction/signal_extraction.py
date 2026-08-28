@@ -4,6 +4,7 @@ import json
 import re
 
 # uses amenity taxonomy at scripts/SQL_Queries/canonical_amenities.json
+# combines output with that of Week 3's NER pipeline
 
 # Signal extraction transforms natural text into standardized signals that can be parsed, ranked, stored, etc
 class SignalExtractor:

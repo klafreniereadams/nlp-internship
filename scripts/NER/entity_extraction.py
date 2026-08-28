@@ -1,3 +1,5 @@
+# entity_extraction.py
+
 import os; print("CWD:", os.getcwd())
 import re
 import csv
@@ -12,6 +14,7 @@ from spacy.tokens import Span
 # listing_remarks.csv ---> load outside the class, row by row
 # SpaCy pipeline ---> receives each remark as doc.text
 
+# Spacy 'Language Factory' mechanism
 @Language.factory("entity_extractor")
 def create_entity_extractor(nlp, name, taxonomy_path):
     return EntityExtractor(nlp, taxonomy_path)
