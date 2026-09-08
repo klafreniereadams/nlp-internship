@@ -2,3 +2,5 @@
 venv/
 env/
 __pycache__/
+data/processed/Signals/
+signal_accuracy_eval.py

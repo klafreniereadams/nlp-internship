@@ -1,6 +1,6 @@
 # entity_extraction.py
 
-import os; print("CWD:", os.getcwd())
+import os
 import re
 import csv
 import pandas as pd
@@ -10,18 +10,18 @@ from spacy.language import Language
 from spacy.util import filter_spans
 from spacy.tokens import Span
 
-# taxonomy.json  ---> load inside EntityExtractor.__init__
-# listing_remarks.csv ---> load outside the class, row by row
-# SpaCy pipeline ---> receives each remark as doc.text
+# taxonomy.json  -> load inside EntityExtractor.__init__
+# listing_remarks.csv -> load outside the class, row by row
+# SpaCy pipeline -> receives each remark as doc.text
 
-# Spacy 'Language Factory' mechanism
+# the Spacy 'Language Factory' mechanism
 @Language.factory("entity_extractor")
 def create_entity_extractor(nlp, name, taxonomy_path):
     return EntityExtractor(nlp, taxonomy_path)
 
 # set up pipeline so python will run the extractor on every doc
 def add_entity_extractor(nlp, taxonomy_path):
-    nlp.add_pipe("entity_extractor", config={"taxonomy_path": taxonomy_path})
+    nlp.add_pipe("entity_extractor", config={"taxonomy_path": str(taxonomy_path)})
     return nlp
 
 
@@ -33,8 +33,31 @@ class EntityExtractor:
         # will detect raw n-gram "amenities" identified during text_cleaning
         with open (taxonomy_path, "r") as f:
             taxonomy = json.load(f)
-        self.amenities = [t["term"] for t in taxonomy["terms"]]
 
+        # canonical terms = the dictionary keys
+        self.amenities = list(taxonomy.keys())
+
+        self.synonym_lookup = {}
+        for canonical, synonyms in taxonomy.items():
+            # Normalize synonyms into a list of strings
+            if isinstance(synonyms, str):
+                synonyms = [synonyms]
+            elif isinstance(synonyms, dict):
+                # If a dictionary, flatten its values
+                flat = []
+                for v in synonyms.values():
+                    if isinstance(v, list):
+                        flat.extend(v)
+                    elif isinstance(v, str):
+                        flat.append(v)
+                synonyms = flat
+            elif not isinstance(synonyms, list):
+                continue  # to skip anything unexpected
+
+            # Build lookup
+            for s in synonyms:
+                if isinstance(s, str):
+                    self.synonym_lookup[s.lower()] = canonical.lower()
         # ----------------------------------------------------------------------------
         # Define regex patterns
         # ----------------------------------------------------------------------------
@@ -59,7 +82,6 @@ class EntityExtractor:
     # ----------------------------------------------------------------------------
     # the extraction functions below assume cleaned text from week 2
     # ----------------------------------------------------------------------------
-    
     def extract_bedrooms(self, text):
         for pattern in self.bedroom_patterns:
             match = re.search(pattern, text, re.I)
@@ -100,20 +122,17 @@ class EntityExtractor:
     # Assemble all pertinent specs from listing_remarks.py 
     # ----------------------------------------------------------------------------
     def _extract_amenity_entities(self, doc):
-        text = doc.text
+        text = doc.text.lower()
         spans = []
 
-        for amenity in self.amenities:
-            start = 0
-            while True:
-                idx = text.lower().find(amenity.lower(), start)
-                if idx == -1:
-                    break
-                end = idx + len(amenity)
+        for synonym, canonical in self.synonym_lookup.items():
+            idx = text.find(synonym)
+            if idx != -1:
+                end = idx + len(synonym)
                 span = doc.char_span(idx, end, label="AMENITY")
                 if span is not None:
                     spans.append(span)
-                start = end
+
         return spans
     
     def _extract_numeric_entities(self, doc):
@@ -170,53 +189,46 @@ class EntityExtractor:
         doc.ents = combined_spans
         return doc
 
+
 # ----------------------------------------------------------------------------
 # Write to output labeled entity dataset file'
+# ONLY on first running this module.
 # ----------------------------------------------------------------------------
-nlp = spacy.load("en_core_web_sm")
-# nlp = spacy.load("en_core_web_sm", disable=["ner"]) # possibility if span problems persist
-nlp = add_entity_extractor(nlp, "data/processed/taxonomy.json")
-df = pd.read_csv("data/processed/listing_remarks.csv")
+if __name__ == "__main__":
+    nlp = spacy.load("en_core_web_sm")
+    nlp = add_entity_extractor(nlp, "data/processed/taxonomy.json")
+    df = pd.read_csv("data/processed/listing_remarks.csv")
 
-#def add_entity_extractor(nlp, taxonomy_path):
-    #extractor = EntityExtractor(nlp, taxonomy_path)
-    #nlp.add_pipe(extractor, name="entity_extractor", last=True)
-    #return nlp
+    labeled_data = []
 
-labeled_data = []
-for remark in df["remarks"]:
-    doc = nlp(remark)
-    entities = []
-    readable_entities = []
+    for remark in df["remarks"]:
+        doc = nlp(remark)
+        entities = []
+        readable_entities = []
 
-    for ent in doc.ents:
-        start = ent.start_char
-        end = ent.end_char
-        label = ent.label_
-        text_span = remark[start:end]
+        for ent in doc.ents:
+            start = ent.start_char
+            end = ent.end_char
+            label = ent.label_
+            text_span = remark[start:end]
 
-        # for spaCy training
-        entities.append([start, end, label])
-
-        # for human legibility
-        readable_entities.append({
-            "start": start,
-            "end": end,
-            "label": label,
-            "span_text": text_span
+            entities.append([start, end, label])
+            readable_entities.append({
+                "start": start,
+                "end": end,
+                "label": label,
+                "span_text": text_span
+            })
+            
+        labeled_data.append({
+            "text": remark,
+            "readable_entities": readable_entities
         })
-        
-    labeled_data.append({
-        "text": remark,
-        # "entities": entities, # if I only want entries without readability
-        "readable_entities": readable_entities
-    })
 
-output_path = "scripts/NER/labeled_entity_dataset.json"
-with open(output_path, "w") as f:
-    json.dump(labeled_data, f, indent=2)
+    output_path = "scripts/NER/labeled_entity_dataset.json"
+    with open(output_path, "w") as f:
+        json.dump(labeled_data, f, indent=2)
 
-print(f"Labeled dataset written to {output_path}")
+    print(f"Labeled dataset written to {output_path}")
 
-# amenity taxonomy.json is now shorter than 200 amenities because I manually removed 
-# illogical bigrams
+# amenity taxonomy.json is now shorter than 200 amenities because I manually removed illogical bigrams

@@ -5,7 +5,7 @@
 
 from pathlib import Path
 import spacy
-from signal_extraction import SignalExtractor
+from scripts.Signal_Extraction.signal_extraction import SignalExtractor
 from ..NER.entity_extraction import add_entity_extractor
 
 # Wraps the Week 3's spaCy pipeline so Week 6's SignalExtractor can call 
