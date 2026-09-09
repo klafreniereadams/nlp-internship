@@ -1,0 +1,274 @@
+query,intent
+"Can you show me homes for sale in Los Angeles?",browsing
+"I'm just browsing houses in San Diego to get a feel for the market.",browsing
+"What do condos look like in San Jose these days?",browsing
+"Can I see some listings in San Francisco?",browsing
+"I'm casually looking at homes in Fresno.",browsing
+"Show me what single-family homes look like in Sacramento.",browsing
+"I'm exploring townhomes in Long Beach.",browsing
+"Can you pull up some listings in Oakland?",browsing
+"I'm browsing houses in Bakersfield.",browsing
+"What do starter homes look like in Anaheim?",browsing
+"Can you show me apartments in Riverside?",browsing
+"I'm curious about homes in Stockton.",browsing
+"Show me what condos look like in Irvine.",browsing
+"I'm browsing homes in Chula Vista.",browsing
+"Can you show me listings in Fremont?",browsing
+"I'm exploring homes in Santa Clarita.",browsing
+"What do townhomes look like in Santa Rosa?",browsing
+"Can you show me houses in Modesto?",browsing
+"I'm browsing homes in Oxnard.",browsing
+"Show me what properties look like in Fontana.",browsing
+"Can you show me homes with big yards in Los Angeles?",browsing
+"I'm browsing condos near downtown San Diego.",browsing
+"What do modern homes look like in San Jose?",browsing
+"Show me loft-style apartments in San Francisco.",browsing
+"I'm casually checking out homes in Fresno near parks.",browsing
+"Can you show me homes with pools in Sacramento?",browsing
+"I'm browsing houses in Long Beach near the water.",browsing
+"What do updated homes look like in Oakland?",browsing
+"Show me homes with large patios in Bakersfield.",browsing
+"I'm browsing homes in Anaheim near Disneyland.",browsing
+"Can you show me homes with fenced yards in Riverside?",browsing
+"I'm exploring condos in Stockton near the waterfront.",browsing
+"What do homes with open floor plans look like in Irvine?",browsing
+"Show me homes with modern kitchens in Chula Vista.",browsing
+"I'm browsing houses in Fremont near schools.",browsing
+"Can you show me homes with big windows in Santa Clarita?",browsing
+"I'm exploring homes with large garages in Santa Rosa.",browsing
+"What do homes with vaulted ceilings look like in Modesto?",browsing
+"Show me homes with outdoor kitchens in Oxnard.",browsing
+"I'm browsing homes with decks in Fontana.",browsing
+"Can you show me homes with updated interiors in Los Angeles?",browsing
+"I'm browsing homes with walkable neighborhoods in San Diego.",browsing
+"What do homes with hardwood floors look like in San Jose?",browsing
+"Show me homes with skylights in San Francisco.",browsing
+"I'm browsing homes with modern lighting in Fresno.",browsing
+"Can you show me homes with landscaped yards in Sacramento?",browsing
+"I'm browsing homes with large closets in Long Beach.",browsing
+"What do homes with sunrooms look like in Oakland?",browsing
+"Show me homes with bonus rooms in Bakersfield.",browsing
+"I'm browsing homes with updated bathrooms in Anaheim.",browsing
+"Can you show me homes with bright interiors in Riverside?",browsing
+"I'm browsing homes with spacious layouts in Stockton.",browsing
+"What do homes with new flooring look like in Irvine?",browsing
+"Show me homes with modern exteriors in Chula Vista.",browsing
+"I'm browsing homes with fresh paint in Fremont.",browsing
+"Can you show me homes with upgraded features in Santa Clarita?",browsing
+"I'm browsing homes with large dining rooms in Santa Rosa.",browsing
+"What do homes with walk-in pantries look like in Modesto?",browsing
+"Show me homes with updated roofs in Oxnard.",browsing
+"I'm browsing homes with new appliances in Fontana.",browsing
+"Can you show me homes with large entryways in Los Angeles?",browsing
+"I'm browsing homes with modern fixtures in San Diego.",browsing
+"What do homes with new windows look like in San Jose?",browsing
+"Show me homes with new siding in San Francisco.",browsing
+"I'm browsing homes with upgraded landscaping in Fresno.",browsing
+"Can you show me homes with energy-efficient windows in Sacramento?",browsing
+"I'm browsing homes near coffee shops in Long Beach.",browsing
+"What do homes near parks look like in Oakland?",browsing
+"Show me homes near hiking trails in Bakersfield.",browsing
+"I'm browsing homes near bike paths in Anaheim.",browsing
+"Can you show me homes near public transit in Riverside?",browsing
+"I'm browsing homes near shopping centers in Stockton.",browsing
+"What do homes near lakes look like in Irvine?",browsing
+"Show me homes near golf courses in Chula Vista.",browsing
+"I'm browsing homes near playgrounds in Fremont.",browsing
+"Can you show me homes near good restaurants in Santa Clarita?",browsing
+"I'm browsing homes near good schools in Santa Rosa.",browsing
+"What do homes near downtown look like in Modesto?",browsing
+"Show me homes near dog parks in Oxnard.",browsing
+"I'm browsing homes near the beach in Long Beach.",browsing
+"Can you show me homes near major employers in San Jose?",browsing
+"I'm browsing homes near transit hubs in San Francisco.",browsing
+"What do homes near universities look like in Los Angeles?",browsing
+"Show me homes near hospitals in San Diego.",browsing
+"I'm browsing homes near tech centers in Fremont.",browsing
+"Can you show me homes near entertainment districts in Anaheim?",browsing
+"I'm browsing homes near historic areas in Sacramento.",browsing
+"What do homes near shopping malls look like in Irvine?",browsing
+"Show me homes near waterfront areas in Stockton.",browsing
+"I'm browsing homes near quiet neighborhoods in Santa Clarita.",browsing
+"Can you show me homes near cultural districts in Oakland?",browsing
+"I'm browsing homes near scenic views in Santa Rosa.",browsing
+"How much do homes typically cost in Los Angeles?",researching
+"What are the average home prices in San Diego right now?",researching
+"How competitive is the market in San Jose?",researching
+"What neighborhoods in San Francisco offer the best value?",researching
+"How fast are homes selling in Fresno?",researching
+"What are typical property taxes like in Sacramento?",researching
+"What should I know about buying a home in Long Beach?",researching
+"How walkable are neighborhoods in Oakland?",researching
+"What areas in Bakersfield have newer construction?",researching
+"What are the best school districts in Anaheim?",researching
+"What is the median condo price in Riverside?",researching
+"How affordable is the market in Stockton?",researching
+"What should I know about HOAs in Irvine?",researching
+"What are typical home ages in Chula Vista?",researching
+"How strong is demand for homes in Fremont?",researching
+"What neighborhoods in Santa Clarita are most family-friendly?",researching
+"What is the average rent-to-price ratio in Santa Rosa?",researching
+"How old are most homes in Modesto?",researching
+"What are typical lot sizes in Oxnard?",researching
+"What is the average price per square foot in Fontana?",researching
+"What is the typical appreciation rate in Los Angeles?",researching
+"How stable is the condo market in San Diego?",researching
+"What types of homes sell fastest in San Jose?",researching
+"What is the average down payment buyers make in San Francisco?",researching
+"What is the typical age of homes in Fresno?",researching
+"How competitive are offers in Sacramento?",researching
+"What is the average HOA fee in Long Beach?",researching
+"What types of homes are most common in Oakland?",researching
+"What is the average mortgage payment in Bakersfield?",researching
+"What is the typical closing timeline in Anaheim?",researching
+"What is the average home size in Riverside?",researching
+"What is the typical commute like in Stockton?",researching
+"What is the average condo size in Irvine?",researching
+"What is the typical home style in Chula Vista?",researching
+"What is the average home age in Fremont?",researching
+"What is the typical neighborhood vibe in Santa Clarita?",researching
+"What is the average property tax rate in Santa Rosa?",researching
+"What is the typical home layout in Modesto?",researching
+"What is the average utility cost for homes in Oxnard?",researching
+"What is the typical home price trend in Fontana?",researching
+"What is the average time homes stay on market in Los Angeles?",researching
+"What is the typical buyer competition like in San Diego?",researching
+"What is the average condo HOA in San Jose?",researching
+"What is the typical home renovation trend in San Francisco?",researching
+"What is the average home insurance cost in Fresno?",researching
+"What is the typical neighborhood density in Sacramento?",researching
+"What is the average home upgrade cost in Long Beach?",researching
+"What is the typical home inspection issue in Oakland?",researching
+"What is the average home age in Bakersfield?",researching
+"What is the typical home appreciation in Anaheim?",researching
+"What is the average home maintenance cost in Riverside?",researching
+"What is the typical home price range in Stockton?",researching
+"What is the average condo price trend in Irvine?",researching
+"What is the typical home buyer profile in Chula Vista?",researching
+"What is the average home size trend in Fremont?",researching
+"What is the typical neighborhood growth in Santa Clarita?",researching
+"What is the average home renovation cost in Santa Rosa?",researching
+"What is the typical home layout trend in Modesto?",researching
+"What is the average home energy efficiency in Oxnard?",researching
+"What is the typical home exterior style in Fontana?",researching
+"What is the average home demand in Los Angeles?",researching
+"What is the typical home supply in San Diego?",researching
+"What is the average home equity growth in San Jose?",researching
+"What is the typical home buyer competition in San Francisco?",researching
+"What is the average home affordability in Fresno?",researching
+"What is the typical home turnover rate in Sacramento?",researching
+"What is the average home remodel frequency in Long Beach?",researching
+"What is the typical home foundation type in Oakland?",researching
+"What is the average home roof age in Bakersfield?",researching
+"What is the typical home flooring trend in Anaheim?",researching
+"What is the average home cooling cost in Riverside?",researching
+"What is the typical home heating cost in Stockton?",researching
+"What is the average home kitchen upgrade cost in Irvine?",researching
+"What is the typical home bathroom upgrade trend in Chula Vista?",researching
+"What is the average home garage size in Fremont?",researching
+"What is the typical home yard size in Santa Clarita?",researching
+"What is the average home landscaping cost in Santa Rosa?",researching
+"What is the typical home siding type in Modesto?",researching
+"What is the average home window upgrade cost in Oxnard?",researching
+"What is the typical home appliance upgrade trend in Fontana?",researching
+"What is the average home market stability in Los Angeles?",researching
+"What is the typical home buyer strategy in San Diego?",researching
+"What is the average home seller motivation in San Jose?",researching
+"What is the typical home bidding pattern in San Francisco?",researching
+"What is the average home neighborhood safety rating in Fresno?",researching
+"What is the typical home walkability score in Sacramento?",researching
+"I want a house in Los Angeles with a modern kitchen.",ready_to_buy
+"Find me a home in San Diego near good schools.",ready_to_buy
+"I'm trying to buy a condo in San Jose with updated appliances.",ready_to_buy
+"I want a property in San Francisco with parking.",ready_to_buy
+"Help me find a house in Fresno with a large yard.",ready_to_buy
+"I'm planning to buy a home in Sacramento with a renovated bathroom.",ready_to_buy
+"I want a condo in Long Beach close to the beach.",ready_to_buy
+"Find me a house in Oakland with a garage.",ready_to_buy
+"I'm hoping to buy a home in Bakersfield under $500k.",ready_to_buy
+"I want a house in Anaheim with a fenced yard.",ready_to_buy
+"Find me a condo in Riverside with low HOA fees.",ready_to_buy
+"I'm looking to purchase a home in Stockton with a big backyard.",ready_to_buy
+"I want a townhouse in Irvine with modern finishes.",ready_to_buy
+"Help me find a home in Chula Vista with a bonus room.",ready_to_buy
+"I'm ready to purchase a house in Fremont near tech employers.",ready_to_buy
+"I want a home in Santa Clarita with a large master suite.",ready_to_buy
+"Find me a house in Santa Rosa with a renovated interior.",ready_to_buy
+"I'm searching for a home in Modesto with a spacious layout.",ready_to_buy
+"I want a property in Oxnard near the coast.",ready_to_buy
+"Help me find a house in Fontana with a two-car garage.",ready_to_buy
+"I'm ready to buy a home in Los Angeles with an open floor plan.",ready_to_buy
+"I want a house in San Diego with a pool.",ready_to_buy
+"Find me a condo in San Jose near transit.",ready_to_buy
+"I'm looking to buy a home in San Francisco with updated appliances.",ready_to_buy
+"I want a house in Fresno with new flooring.",ready_to_buy
+"Help me find a home in Sacramento with a large patio.",ready_to_buy
+"I'm ready to purchase a home in Long Beach with hardwood floors.",ready_to_buy
+"I want a property in Oakland with a modern kitchen.",ready_to_buy
+"Find me a house in Bakersfield with a big yard.",ready_to_buy
+"I'm hoping to buy a home in Anaheim with a walk-in pantry.",ready_to_buy
+"I want a house in Riverside with a bright interior.",ready_to_buy
+"Find me a home in Stockton with a renovated bathroom.",ready_to_buy
+"I'm ready to buy a condo in Irvine with energy-efficient windows.",ready_to_buy
+"I want a house in Chula Vista with a large dining room.",ready_to_buy
+"Help me find a home in Fremont with a spacious garage.",ready_to_buy
+"I'm planning to buy a home in Santa Clarita with a landscaped yard.",ready_to_buy
+"I want a house in Santa Rosa with a sunroom.",ready_to_buy
+"Find me a home in Modesto with a modern exterior.",ready_to_buy
+"I'm looking to purchase a house in Oxnard with a deck.",ready_to_buy
+"I want a property in Fontana with updated lighting.",ready_to_buy
+"I'm ready to buy a home in Los Angeles with a large kitchen.",ready_to_buy
+"Find me a house in San Diego with a finished basement.",ready_to_buy
+"I want a condo in San Jose with a fenced yard.",ready_to_buy
+"I'm searching for a home in San Francisco with a large living room.",ready_to_buy
+"I want a house in Fresno with a bonus room.",ready_to_buy
+"Help me find a home in Sacramento with a modern bathroom.",ready_to_buy
+"I'm ready to purchase a condo in Long Beach with a balcony.",ready_to_buy
+"I want a house in Oakland with a walk-in closet.",ready_to_buy
+"Find me a home in Bakersfield with a patio.",ready_to_buy
+"I'm hoping to buy a house in Anaheim with updated flooring.",ready_to_buy
+"I want a home in Riverside with a large yard.",ready_to_buy
+"Find me a property in Stockton with a modern layout.",ready_to_buy
+"I'm ready to buy a house in Irvine with a renovated kitchen.",ready_to_buy
+"I want a home in Chula Vista with a spacious backyard.",ready_to_buy
+"Help me find a house in Fremont with a bright interior.",ready_to_buy
+"I'm planning to buy a home in Santa Clarita with a big garage.",ready_to_buy
+"I want a house in Santa Rosa with modern fixtures.",ready_to_buy
+"Find me a home in Modesto with a large porch.",ready_to_buy
+"I'm looking to purchase a house in Oxnard with updated appliances.",ready_to_buy
+"I want a property in Fontana with a modern roof.",ready_to_buy
+"I'm ready to buy a home in Los Angeles with a guest house.",ready_to_buy
+"Find me a house in San Diego with a large driveway.",ready_to_buy
+"I want a condo in San Jose with a home office.",ready_to_buy
+"I'm searching for a home in San Francisco with a remodeled bathroom.",ready_to_buy
+"I want a house in Fresno with a large entryway.",ready_to_buy
+"Help me find a home in Sacramento with a walk-in shower.",ready_to_buy
+"I'm ready to purchase a home in Long Beach with new windows.",ready_to_buy
+"I want a property in Oakland with a modern exterior.",ready_to_buy
+"Find me a house in Bakersfield with a renovated interior.",ready_to_buy
+"I'm hoping to buy a home in Anaheim with a large kitchen island.",ready_to_buy
+"I want a house in Riverside with a spacious living room.",ready_to_buy
+"Find me a home in Stockton with a fenced yard.",ready_to_buy
+"I'm ready to buy a condo in Irvine with a walk-in closet.",ready_to_buy
+"I want a home in Chula Vista with a modern kitchen.",ready_to_buy
+"Help me find a house in Fremont with a large patio.",ready_to_buy
+"I'm planning to buy a home in Santa Clarita with a bonus room.",ready_to_buy
+"I want a house in Santa Rosa with a bright interior.",ready_to_buy
+"Find me a home in Modesto with updated flooring.",ready_to_buy
+"I'm looking to purchase a house in Oxnard with a spacious layout.",ready_to_buy
+"I want a property in Fontana with a renovated kitchen.",ready_to_buy
+"I'm ready to buy a home in Los Angeles near public transit.",ready_to_buy
+"Find me a house in San Diego close to parks.",ready_to_buy
+"I want a condo in San Jose with a balcony.",ready_to_buy
+"I'm searching for a home in San Francisco with natural light.",ready_to_buy
+"I want a house in Fresno with upgraded appliances.",ready_to_buy
+"Help me find a home in Sacramento with a big backyard.",ready_to_buy
+"I'm ready to purchase a home in Long Beach near the waterfront.",ready_to_buy
+"I want a property in Oakland with a large dining area.",ready_to_buy
+"Find me a house in Bakersfield with modern fixtures.",ready_to_buy
+"I'm hoping to buy a home in Anaheim near shopping centers.",ready_to_buy
+"I want a house in Riverside with a renovated kitchen.",ready_to_buy
+"Find me a home in Stockton with a bright interior.",ready_to_buy
+"I'm ready to buy a condo in Irvine near parks.",ready_to_buy
+"I want a home in Chula Vista with a walk-in pantry.",ready_to_buy
+"Help me find a house in Fremont with updated lighting.",ready_to_buy
