@@ -1,7 +1,7 @@
 import os
 import mysql.connector
 import pandas as pd
-from text_cleaning import TextCleaner
+from scripts.Data_Preparation.text_cleaning import TextCleaner
 
 os.makedirs('data/processed', exist_ok=True)
 

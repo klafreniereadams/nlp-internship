@@ -9,7 +9,7 @@ if ROOT not in sys.path:
 #print("PYTEST sys.path:", sys.path)
 
 import pytest
-from scripts.text_cleaning import TextCleaner
+from scripts.Data_Preparation.text_cleaning import TextCleaner
 import pandas as pd
 
 @pytest.fixture

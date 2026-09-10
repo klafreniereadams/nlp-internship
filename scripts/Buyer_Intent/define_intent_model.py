@@ -60,3 +60,13 @@ with open(vectorizer_path, "wb") as f:
 
 with open(model_path, "wb") as f:
     pickle.dump(model, f)
+
+"""
+Results:
+
+Accuracy: 0.9454545454545454
+Confusion Matrix:
+[[18  0  1]
+ [ 0 18  1]
+ [ 1  0 16]]
+"""

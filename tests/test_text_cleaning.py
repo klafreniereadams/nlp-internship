@@ -1,6 +1,6 @@
 import pandas as pd
 #from text_cleaner.cleaner import TextCleaner #incorrect path
-from scripts.text_cleaning import TextCleaner
+from scripts.Data_Preparation.text_cleaning import TextCleaner
 
 df = pd.read_csv("data/processed/listing_remarks.csv")
 
