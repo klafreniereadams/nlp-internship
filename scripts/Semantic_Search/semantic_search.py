@@ -1,3 +1,5 @@
+# semantic_search.py
+
 import os
 # I tinkered with the thread number to decrease latency at the encoding step with sentence_transformer on my machine
 os.environ["OMP_NUM_THREADS"] = "4"
@@ -22,6 +24,7 @@ class SemanticSearcher:
     
     def build_index(self):
         df = pd.read_csv(self.remarks_path)
+        self.df = df
         self.listings = df["remarks"].fillna("").tolist()
 
         # If cached embeddings exist, load them now
@@ -66,5 +69,12 @@ class SemanticSearcher:
         faiss.normalize_L2(query_emb)
 
         scores, indices = self.index.search(query_emb, top_k)
-        results = [(self.listings[i], scores[0][j]) for j, i in enumerate(indices[0])]
+
+        results = []
+        for rank, idx in enumerate(indices[0]):
+            row = self.df.iloc[idx].to_dict()
+            results.append({
+                "listing": row,
+                "score": float(scores[0][rank])
+            })
         return results
