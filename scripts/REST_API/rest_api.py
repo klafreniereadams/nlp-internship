@@ -2,14 +2,14 @@
 # imports from app_setup.py
 
 from fastapi import HTTPException, FastAPI, Depends
-from fastapi_limiter import RateLimiter
+from fastapi_limiter.depends import RateLimiter
 from pydantic import BaseModel
 from scripts.Semantic_Search.filtering import apply_filters
 from .app_setup import cache_get, cache_set, db_conn
 
 
 # Import the initialized NLP components
-from app_setup import (
+from scripts.REST_API.app_setup import (
     app,
     query_parser,
     semantic_searcher,
@@ -228,12 +228,17 @@ async def list_endpoints():
     }
 
 """
-CLI commands from project root:
+Launching the API:
 
-lsof =i :8000 # checks what's active on port 8000
+docker compose up -d
+docker ps
+docker run -d --name redis -p 6379:6379 redis
+
+lsof -i :8000 # checks what's active on port 8000
 take note of the PID(second column) of the thing present there.
 kill [PID]
 then run:
 uvicorn scripts.REST_API.rest_api:app --reload
+http://127.0.0.1:8000/docs
 
 """

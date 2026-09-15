@@ -64,7 +64,7 @@ for _, row in sample_df.iterrows():
     }
 
     summary = summarizer.extractive_summary(remarks, entities)
-    print(summary)
+    #print(summary)
 
 """
 This is a 5 bed, 2.0 bath home priced at $350000 in Bakersfield. Welcome to your dream home! 
