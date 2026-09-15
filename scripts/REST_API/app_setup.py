@@ -63,6 +63,7 @@ async def lifespan(app: FastAPI):
     # Initialize heavy NLP components only once
     query_parser = QueryParser(amenities_path)
     semantic_searcher = SemanticSearcher()
+    semantic_searcher.load_index()
 
     # Initialize spaCy + entity extractor pipeline
     taxonomy_path = Path("scripts/SQL_Queries/canonical_amenities.json")

@@ -7,16 +7,18 @@ from pydantic import BaseModel
 from scripts.Semantic_Search.filtering import apply_filters
 from .app_setup import cache_get, cache_set, db_conn
 
-
 # Import the initialized NLP components
-from scripts.REST_API.app_setup import (
-    app,
-    query_parser,
-    semantic_searcher,
-    entity_extractor,
-    summarizer,
-    compliance_checker
-)
+import scripts.REST_API.app_setup as setup
+app = setup.app
+
+#from scripts.REST_API.app_setup import (
+    #app,
+    #query_parser,
+    #semantic_searcher,
+    #entity_extractor,
+    #summarizer,
+    #compliance_checker
+#)
 
 class SearchRequest(BaseModel):
     query: str
@@ -31,16 +33,19 @@ class SearchResponse(BaseModel):
 @app.post("/search", response_model=SearchResponse, dependencies=[Depends(RateLimiter(times=10, seconds=1))])
 async def search_listings(request: SearchRequest):
     cache_key = f"search:{request.query}:{request.top_k}"
-    cached = cache_get(cache_key)
+    cached = await cache_get(cache_key)
     if cached:
         return cached
 
     # parse filters from natural language
-    filters = query_parser.parse(request.query)
+    filters = setup.query_parser.parse(request.query)
     # semantic search returns structured listings
-    semantic_results = semantic_searcher.search(request.query, request.top_k)
-    # apply structured filters
-    results = apply_filters(semantic_results, filters)
+    semantic_results = setup.semantic_searcher.search(request.query, request.top_k)
+
+    # re-apply structured filters after demo
+    results = semantic_results
+    #results = apply_filters(semantic_results)
+    #results = apply_filters(semantic_results, filters)
 
     response = SearchResponse(
         query=request.query,
@@ -48,47 +53,101 @@ async def search_listings(request: SearchRequest):
         count=len(results)
     )
 
-    cache_set(cache_key, response.dict())
+    await cache_set(cache_key, response.model_dump())
     return response
 
 
 @app.post("/parse-query")
 async def parse_query(request: SearchRequest):
-    filters = query_parser.parse(request.query)
+    filters = setup.query_parser.parse(request.query)
     return {"query": request.query, "filters": filters}
 
 
 @app.post("/summarize")
 async def summarize_listing(request: SearchRequest):
     # Run semantic search to get the top listing
-    semantic_results = semantic_searcher.search(request.query, top_k=1)
+    semantic_results = setup.semantic_searcher.search(request.query, top_k=1)
 
+    print("SEMANTIC RESULTS:", semantic_results)
     if not semantic_results:
         raise HTTPException(status_code=404, detail="No listings found")
 
     listing = semantic_results[0]["listing"]
 
-    # Summarize the listing using your summarizer component
-    summary = summarizer.summarize(listing)
+    print("LISTING TYPE:", type(listing))
+    print("LISTING VALUE:", listing)
 
+
+    remarks = listing["L_Remarks"]
+    doc = setup.entity_extractor(remarks)
+
+    # # Convert spaCy entities into the dict format your summarizer expects
+    # entities = {
+    #     "bedrooms": None,
+    #     "bathrooms": None,
+    #     "price": None,
+    #     "city": None
+    # }
+
+    # use listing fields instead of spaCY for demo
+    entities = {
+        "bedrooms": listing.get("beds"),
+        "bathrooms": listing.get("baths"),
+        "price": listing.get("price"),
+        "city": listing.get("L_City")
+}
+
+
+    for ent in doc.ents:
+        if ent.label_ == "BEDROOMS":
+            entities["bedrooms"] = ent.text
+        elif ent.label_ == "BATHROOMS":
+            entities["bathrooms"] = ent.text
+        elif ent.label_ == "PRICE":
+            entities["price"] = ent.text
+        # AMENITY and SQFT are access separately
+
+    summary = setup.summarizer.extractive_summary(remarks, entities)
     return {
         "query": request.query,
         "summary": summary,
-        "listing": listing
+        "listing": listing,
+        "entities": entities
     }
 
 @app.post("/entities")
 async def extract_entities(request: SearchRequest):
     # Run semantic search to get the top listing
-    semantic_results = semantic_searcher.search(request.query, top_k=1)
+    semantic_results = setup.semantic_searcher.search(request.query, top_k=1)
 
     if not semantic_results:
         raise HTTPException(status_code=404, detail="No listings found")
 
     listing = semantic_results[0]["listing"]
 
-    # Extract entities using your entity_extractor component
-    entities = entity_extractor.extract(listing)
+    remarks = listing["remarks"]
+    doc = setup.entity_extractor(remarks)
+
+    # Convert spaCy entities into a simple dict
+    entities = {
+        "bedrooms": None,
+        "bathrooms": None,
+        "price": None,
+        "sqft": None,
+        "amenities": []
+    }
+
+    for ent in doc.ents:
+        if ent.label_ == "BEDROOMS":
+            entities["bedrooms"] = ent.text
+        elif ent.label_ == "BATHROOMS":
+            entities["bathrooms"] = ent.text
+        elif ent.label_ == "PRICE":
+            entities["price"] = ent.text
+        elif ent.label_ == "SQFT":
+            entities["sqft"] = ent.text
+        elif ent.label_ == "AMENITY":
+            entities["amenities"].append(ent.text)
 
     return {
         "query": request.query,
@@ -99,7 +158,7 @@ async def extract_entities(request: SearchRequest):
 @app.post("/compliance")
 async def check_compliance(request: SearchRequest):
     # Run semantic search to get the top listing
-    semantic_results = semantic_searcher.search(request.query, top_k=1)
+    semantic_results = setup.semantic_searcher.search(request.query, top_k=1)
 
     if not semantic_results:
         raise HTTPException(status_code=404, detail="No listings found")
@@ -107,7 +166,7 @@ async def check_compliance(request: SearchRequest):
     listing = semantic_results[0]["listing"]
 
     # Run compliance check on the listing
-    compliance_result = compliance_checker.check(listing)
+    compliance_result = setup.compliance_checker.check(listing)
 
     return {
         "query": request.query,
@@ -123,10 +182,10 @@ async def check_compliance(request: SearchRequest):
 @app.post("/search-broad")
 async def search_broad(request: SearchRequest):
     query = request.query
-    filters = query_parser.parse(query)
+    filters = setup.query_parser.parse(query)
 
     # 1. Semantic search
-    semantic_results = semantic_searcher.search(query, request.top_k)
+    semantic_results = setup.semantic_searcher.search(query, request.top_k)
 
     # 2. BM25 search
     try:
@@ -137,7 +196,7 @@ async def search_broad(request: SearchRequest):
 
     # 3. SQL search
     try:
-        sql_query, params = query_parser.to_sql(filters)
+        sql_query, params = setup.query_parser.to_sql(filters)
         with db_conn.cursor() as cur:
             cur.execute(sql_query, params)
             sql_rows = cur.fetchall()
@@ -233,6 +292,7 @@ Launching the API:
 docker compose up -d
 docker ps
 docker run -d --name redis -p 6379:6379 redis
+or docker start redis
 
 lsof -i :8000 # checks what's active on port 8000
 take note of the PID(second column) of the thing present there.

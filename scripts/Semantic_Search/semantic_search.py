@@ -25,7 +25,7 @@ class SemanticSearcher:
     def build_index(self):
         df = pd.read_csv(self.remarks_path)
         self.df = df
-        self.listings = df["remarks"].fillna("").tolist()
+        self.listings = df["L_Remarks"].fillna("").tolist()
 
         # If cached embeddings exist, load them now
         if os.path.exists(self.emb_path):
@@ -55,7 +55,8 @@ class SemanticSearcher:
         print(f"Loaded cached embeddings: {embeddings.shape}")
 
         df = pd.read_csv(self.remarks_path)
-        self.listings = df["remarks"].fillna("").tolist()
+        self.df = df
+        self.listings = df["L_Remarks"].fillna("").tolist()
         print(f"Loaded {len(self.listings)} listing remarks")
 
         dim = embeddings.shape[1]
