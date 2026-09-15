@@ -68,15 +68,10 @@ async def summarize_listing(request: SearchRequest):
     # Run semantic search to get the top listing
     semantic_results = setup.semantic_searcher.search(request.query, top_k=1)
 
-    print("SEMANTIC RESULTS:", semantic_results)
     if not semantic_results:
         raise HTTPException(status_code=404, detail="No listings found")
 
     listing = semantic_results[0]["listing"]
-
-    print("LISTING TYPE:", type(listing))
-    print("LISTING VALUE:", listing)
-
 
     remarks = listing["L_Remarks"]
     doc = setup.entity_extractor(remarks)
@@ -96,7 +91,6 @@ async def summarize_listing(request: SearchRequest):
         "price": listing.get("price"),
         "city": listing.get("L_City")
 }
-
 
     for ent in doc.ents:
         if ent.label_ == "BEDROOMS":
@@ -284,6 +278,42 @@ async def list_endpoints():
             "/search-broad",
             "/health"
         ]
+    }
+
+class ListingPayload(BaseModel):
+    listing: dict
+
+@app.post("/summarize-listing")
+async def summarize_specific_listing(payload: ListingPayload):
+    listing = payload.listing
+
+    remarks = listing.get("L_Remarks", "")
+    doc = setup.entity_extractor(remarks)
+
+    entities = {
+        "bedrooms": listing.get("beds"),
+        "bathrooms": listing.get("baths"),
+        "price": listing.get("price"),
+        "city": listing.get("L_City"),
+        "amenities": []
+    }
+
+    for ent in doc.ents:
+        if ent.label_ == "BEDROOMS":
+            entities["bedrooms"] = ent.text
+        elif ent.label_ == "BATHROOMS":
+            entities["bathrooms"] = ent.text
+        elif ent.label_ == "PRICE":
+            entities["price"] = ent.text
+        elif ent.label_ == "AMENITY":
+            entities["amenities"].append(ent.text)
+
+    summary = setup.summarizer.extractive_summary(remarks, entities)
+
+    return {
+        "summary": summary,
+        "listing": listing,
+        "entities": entities
     }
 
 """
