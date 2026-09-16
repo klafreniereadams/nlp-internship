@@ -38,10 +38,10 @@ Redis rate limiting
                               │
         ┌─────────────────────┼─────────────────────┐
         ▼                     ▼                     ▼
-┌───────────┐      ┌─────────────┐     ┌────────────────┐
-│ MySQL DB     │     │ FAISS Index    │     │ NLP Modules       │
-│ MLS listings │     │ Embeddings     │     │ NER, POS, parsing │
-└────────────┘     └─────────────┘     └──────────────┘
+      
+    MySQL DB             FAISS Index           NLP Modules       
+   MLS listings          Embeddings          NER, POS, parsing
+
 
 ## Repository structure
 
