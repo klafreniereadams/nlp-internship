@@ -40,7 +40,7 @@ Redis rate limiting
         ▼                     ▼                     ▼
       
     MySQL DB             FAISS Index           NLP Modules       
-   MLS listings          Embeddings          NER, POS, parsing
+    MLS listings          Embeddings          NER, POS, parsing
 
 
 ## Repository structure
