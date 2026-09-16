@@ -44,9 +44,8 @@ Redis rate limiting
 
 
 ## Repository structure
-<span>
+```
 nlp-internship/
-    cleanenv/
     data/
     notebooks/
     scripts/
@@ -64,9 +63,8 @@ nlp-internship/
         SQL_Queries/
         Streamlit/
     tests/
-</span>    
-
-
+```
+  
 ## The final user experience:
 ### Natural language query → NLP parsing → SQL filters → semantic search → side‑by‑side comparison + summaries
 
