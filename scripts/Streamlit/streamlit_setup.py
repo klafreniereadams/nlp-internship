@@ -2,45 +2,81 @@
 
 import streamlit as st
 import requests
-import base64
 
 API_BASE = "http://127.0.0.1:8000" # will change to a proper URL
 
 st.set_page_config(page_title="IDX NLP Demo", layout="wide")
 
-# background image
+# background color
 st.markdown(
     """
     <style>
-        /* Full-page background */
         .stApp {
-            background-image: url("https://your-image-url-here.jpg");
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+            background-color: #f7f3e9; /* soft cream */
         }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-
 # Title formatting
 st.markdown(
     """
-    <h1 style="font-size: 2.7rem; font-weight: 600;">
-        ID<sub>E</sub>Xpert - Intelligent Real Estate Searching
-    </h1>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    """,
+        unsafe_allow_html=True
+)
+st.markdown(
+       """
+    <style>
+        .main-title {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 48px;
+            font-weight: 600;
+            text-align: center;
+            color: #3a3a3a;
+            margin-bottom: -10px;
+        }
+
+        .subtitle {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 22px;
+            font-weight: 400;
+            text-align: center;
+            color: #6e6e6e;
+            margin-top: 0px;
+        }
+    </style>
     """,
     unsafe_allow_html=True
 )
-tabs = st.tabs(["Search", "Metrics"])
+st.markdown("<div class='main-title'>ID<sub>E</sub>XPERT</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Smarter Search for Real Estate</div>", unsafe_allow_html=True)
+
+# Regular text
+st.markdown(
+    """
+    <style>
+        /* Increase general text size */
+        html, body, p, span, div {
+            font-size: 24px;
+        }
+
+        /* Optional: make Streamlit widgets match */
+        .stMarkdown, .stTextInput, .stSelectbox, .stMultiSelect, .stButton {
+            font-size: 18px;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+tabs = st.tabs(["Search", "Keyword vs Natural Language Search", "Metrics"])
 
 with tabs[0]:
     # ---------------------------------------------------------
     # User Input
     # ---------------------------------------------------------
-    query = st.text_input("What are you looking for?", "3 bed 2 bath under 700k in Irvine")
+    query = st.text_input("What are you looking for?", placeholder="e.g., 3 bed 2 bath home under 700k in Irvine")
 
     # Run search and store results
     if st.button("Search"):
@@ -62,7 +98,7 @@ with tabs[0]:
         # First thing a user sees; confirms their query terms
         filters = st.session_state["parsed_filters"].get("filters", {})
 
-        st.markdown("### Got it! Your preferences:")
+        st.markdown("### Your preferences:")
         st.markdown(
             f"""
             <div style="
@@ -73,7 +109,7 @@ with tabs[0]:
                 font-size:1rem;
                 line-height:1.5;
             ">
-                <strong>Max Price:</strong> ${filters.get("price_max", "—"):,.0f}<br>
+                <strong>Max Price:</strong> ${f"{filters['price_max']:,.0f}" if isinstance(filters.get("price_max"), (int, float)) else "—"}<br>
                 <strong>Bedrooms:</strong> {filters.get("bedrooms", "—")}<br>
                 <strong>Bathrooms:</strong> {filters.get("bathrooms", "—")}<br>
                 <strong>Area:</strong> {filters.get("city", "—")}<br>
@@ -81,7 +117,7 @@ with tabs[0]:
             """,
             unsafe_allow_html=True
         )
-        st.subheader(f"## Found {count} intelligent matches")
+        st.subheader(f"Found {count} intelligent matches")
 
 
         # Two-column layout for search results means less scrolling
@@ -113,10 +149,18 @@ with tabs[0]:
                     with st.expander("View Full Remarks"):
                         st.write(remarks)
 
-                    # set both selected listing AND expanded summary index
                     if st.button(f"Summarize listing #{idx+1}", key=f"summarize_{idx}"):
-                        st.session_state["selected_listing"] = listing
-                        st.session_state["expanded_summary"] = idx
+
+                        # If this listing is already expanded → collapse it
+                        if st.session_state.get("expanded_summary") == idx:
+                            st.session_state["expanded_summary"] = None
+                            st.session_state["selected_listing"] = None
+
+                        # Otherwise → expand it
+                        else:
+                            st.session_state["expanded_summary"] = idx
+                            st.session_state["selected_listing"] = listing
+
 
                     # Inline summary now appears directly under this listing
                     if st.session_state.get("expanded_summary") == idx:
@@ -177,80 +221,194 @@ with tabs[0]:
 
                     st.markdown("---")
 
-        # ---------------------------------------------------------
-        # Prettier Keyword vs Natural Language Search section (w/ collapsible bar)
-        # ---------------------------------------------------------
+with tabs[1]:
+    st.subheader("Keyword vs Natural Language Search")
 
-        st.markdown("## 🔍 Keyword vs Natural Language Search")
+    # Explanation block
+    st.markdown(
+        """
+        <div style="
+            background-color:#f8f9fa;
+            padding:15px;
+            border-radius:10px;
+            border:1px solid #e0e0e0;
+            font-size:18px;
+            margin-bottom:20px;
+        ">
+            <strong>Standard Search</strong> matches exact words or phrases in the listing data.<br>
+            <strong>Natural Language Search</strong> interprets meaning, intent, and context.
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    # -----------------------------------------
+    # User test search box
+    # -----------------------------------------
+    st.markdown(
+        """
+        <div style="
+            font-size:18px;
+            margin-top:10px;
+            margin-bottom:5px;
+        ">
+            Try it yourself — enter a search and compare how each method responds:
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-        # Collapsible comparison section
-        with st.expander("Click to compare keyword searching vs natural language searching", expanded=False):
+    user_test_query = st.text_input(
+        "Test Search",
+        placeholder="e.g., homes with a big yard near Escondido",
+        value=query if query else ""
+    )
+    if user_test_query:
+        test_results = requests.post(
+            f"{API_BASE}/compare_search",
+            json={"query": user_test_query}
+        ).json()
 
-            comparison = requests.post(
-                f"{API_BASE}/keyword_search",
-                json={"query": query}
+        col1, col2 = st.columns(2)
+
+        # # Fetch comparison results
+        # comparison = requests.post(
+        # f"{API_BASE}/compare_search",
+        # json={"query": query}).json()
+
+        # -------------------------
+        # Condensed Keyword Result
+        # -------------------------
+        with col1:
+            st.markdown("#### Standard Search Results")
+
+            kw = test_results.get("keyword_result")
+            if kw:
+                st.markdown(
+                    f"""
+                    <div style="
+                        background-color:#ffffff;
+                        padding:12px;
+                        border-radius:10px;
+                        border:1px solid #e0e0e0;
+                        font-size:17px;
+                    ">
+                        <strong>{kw.get("L_Address")}</strong><br>
+                        {kw.get("L_City")}<br>
+                        {kw.get("beds")} beds • {kw.get("baths")} baths<br>
+                        ${kw.get("price"):,.0f}
+                    </div>
+                    """,
+                    unsafe_allow_html=True
+                )
+            else:
+                st.write("No keyword matches found.")
+
+        # -------------------------
+        # Condensed NLP Result
+        # -------------------------
+        with col2:
+            st.markdown("#### Natural Language Result")
+
+            # Fudged NLP search → reuse regular search endpoint
+            nlp_results = requests.post(
+                f"{API_BASE}/search",
+                json={"query": user_test_query}
             ).json()
 
-            colA, colB = st.columns(2)
+            if not nlp_results.get("results"):
+                st.write("No natural language matches found.")
+            else:
+                # Use the FIRST result for the demo
+                listing = nlp_results["results"][0]["listing"]
+                score = nlp_results["results"][0].get("score", 0)
 
-            # -------------------------
-            # Keyword SQL Column
-            # -------------------------
-            with colA:
-                st.markdown("### Standard Search")
+                addr = listing["L_Address"]
+                city = listing["L_City"]
+                beds = listing["beds"]
+                baths = listing["baths"]
+                price = listing["price"]
+                remarks = listing["L_Remarks"]
 
-                kw = comparison.get("keyword_result")
-                if kw:
+                # Summary card (same style as regular search)
+                st.markdown(f"### {addr}, {city}")
+                st.markdown(
+                    f"**Price:** ${price:,.0f}  \n"
+                    f"**Beds:** {beds} | **Baths:** {baths}"
+                )
+                st.markdown(f"**Semantic Match Score:** {score:.3f}")
+
+                # Collapsible remarks
+                with st.expander("View Full Remarks"):
+                    st.write(remarks)
+
+                # Summary button
+                if st.button("Summarize this listing", key="nlp_summarize"):
+                    # Toggle expanded summary
+                    if st.session_state.get("nlp_expanded_summary"):
+                        st.session_state["nlp_expanded_summary"] = False
+                    else:
+                        st.session_state["nlp_expanded_summary"] = True
+                        st.session_state["nlp_selected_listing"] = listing
+
+                # Expanded summary card
+                if st.session_state.get("nlp_expanded_summary"):
+                    selected = st.session_state["nlp_selected_listing"]
+
+                    summary_resp = requests.post(
+                        f"{API_BASE}/summarize-listing",
+                        json={"listing": selected}
+                    ).json()
+
+                    st.markdown("## Listing Summary")
                     st.markdown(
                         f"""
                         <div style="
                             background-color:#f8f9fa;
-                            padding:15px;
+                            padding:20px;
                             border-radius:10px;
                             border:1px solid #e0e0e0;
+                            font-size:1.1rem;
+                            line-height:1.5;
                         ">
-                            <strong>Address:</strong> {kw.get("L_Address")}<br>
-                            <strong>City:</strong> {kw.get("L_City")}<br>
-                            <strong>Beds:</strong> {kw.get("beds")}<br>
-                            <strong>Baths:</strong> {kw.get("baths")}<br>
-                            <strong>Price:</strong> ${kw.get("price"):,.0f}<br>
+                            {summary_resp["summary"]}
                         </div>
                         """,
                         unsafe_allow_html=True
                     )
-                else:
-                    st.write("No keyword matches found.")
 
-            # -------------------------
-            # NLP Semantic Column
-            # -------------------------
-            with colB:
-                st.markdown("### Natural Language Search")
+                    col1, col2 = st.columns(2)
 
-                sm = comparison.get("semantic_result")
-                if sm:
-                    st.markdown(
-                        f"""
-                        <div style="
-                            background-color:#f8f9fa;
-                            padding:15px;
-                            border-radius:10px;
-                            border:1px solid #e0e0e0;
-                        ">
-                            <strong>Address:</strong> {sm.get("L_Address")}<br>
-                            <strong>City:</strong> {sm.get("L_City")}<br>
-                            <strong>Beds:</strong> {sm.get("beds")}<br>
-                            <strong>Baths:</strong> {sm.get("baths")}<br>
-                            <strong>Price:</strong> ${sm.get("price"):,.0f}<br>
-                        </div>
-                        """,
-                        unsafe_allow_html=True
-                    )
-                else:
-                    st.write("No natural language matches found.")
+                    with col1:
+                        st.markdown("## Property Details")
+                        st.markdown(
+                            f"""
+                            **Address:** {selected["L_Address"]}, {selected["L_City"]}  
+                            **Price:** ${selected["price"]:,.0f}  
+                            **Bedrooms:** {selected["beds"]}  
+                            **Bathrooms:** {selected["baths"]}  
+                            """
+                        )
+
+                    with col2:
+                        st.markdown("## Property Features")
+                        amenities = summary_resp["entities"].get("amenities", [])
+                        if amenities:
+                            st.markdown(
+                                "<ul style='padding-left:20px;'>"
+                                + "".join([f"<li>{a}</li>" for a in amenities])
+                                + "</ul>",
+                                unsafe_allow_html=True
+                            )
+                        else:
+                            st.write("No amenities detected.")
+
+                st.markdown("---")
+                                 
+        colA, colB = st.columns(2)
+
 
 # Metrics tab
-with tabs[1]:
+with tabs[2]:
     st.subheader("Metrics")
 
     metrics = requests.get(f"{API_BASE}/metrics").json()

@@ -47,7 +47,7 @@ class SemanticSearcher:
 
     def load_index(self):
         if not os.path.exists(self.emb_path):
-            raise FileNotFoundError(f"Embeddings not found at {self.emb_path}")
+            self.build_index()
 
         embeddings = np.load(self.emb_path)
         # Ensure cached embeddings are ALSO normalized, to keep latency lower

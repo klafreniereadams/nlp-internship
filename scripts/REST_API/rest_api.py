@@ -254,6 +254,38 @@ async def search_broad(request: SearchRequest):
         "results": final_results,
         "count": len(final_results)
     }
+
+@app.post("/compare-search")
+async def compare_search(request: SearchRequest):
+    # Reuse your hybrid search
+    broad = await search_broad(request)
+
+    results = broad["results"]
+
+    # If hybrid search returned nothing, bail early
+    if not results:
+        return {
+            "query": request.query,
+            "keyword_result": None,
+            "semantic_result": None
+        }
+
+    # 1. Best semantic match
+    semantic_sorted = sorted(results, key=lambda r: r["semantic_score"], reverse=True)
+    semantic_result = semantic_sorted[0]["listing"] if semantic_sorted[0]["semantic_score"] > 0 else None
+
+    # 2. Best keyword match (BM25 or SQL)
+    keyword_sorted = sorted(results, key=lambda r: (r["bm25_score"], r["sql_match"]), reverse=True)
+    top_kw = keyword_sorted[0]
+    keyword_result = top_kw["listing"] if (top_kw["bm25_score"] > 0 or top_kw["sql_match"]) else None
+
+    return {
+        "query": request.query,
+        "keyword_result": keyword_result,
+        "semantic_result": semantic_result
+    }
+
+
 # ----------------------------------------------------------------------------
 
 # not really for the user, but industry standard for APIs
