@@ -29,6 +29,7 @@ defusedxml==0.7.1
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl
 executing @ file:///home/conda/feedstock_root/build_artifacts/executing_1756729339227/work
 faiss==1.12.0
+faiss-cpu
 fastapi==0.141.1
 fastapi-limiter==0.1.5
 fastjsonschema==2.21.2
