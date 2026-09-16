@@ -1,14 +1,14 @@
-## 2026 NLP Internship
+# 2026 NLP Internship
 
-## A production-ready NLP system for real estate listings. Produces a REST API exposing: search, entity extraction, query parsing, and summarization.
+A production-ready NLP system for real estate listings. Produces a REST API exposing: search, entity extraction, query parsing, and summarization.
 
-## Database consists of three MySQL tables of genuine California real estate data provided by IDX Exhange in February 2026:
-### * rets_property: Active/pending listings with remarks, pricing, features
-### * rets_openhouse: Open house schedules and details
-### * california_sold: Historical sold properties with transaction data
+Database consists of three MySQL tables of genuine California real estate data provided by IDX Exhange in February 2026:
+* rets_property: Active/pending listings with remarks, pricing, features
+* rets_openhouse: Open house schedules and details
+* california_sold: Historical sold properties with transaction data
 
 
-## The system demonstrates how modern NLP techniques allow querying in natural language, ultimately outperforming traditional keyword/BM25/SQL search techniques. 
+### The system demonstrates how modern NLP techniques allow querying in natural language, ultimately outperforming traditional keyword/BM25/SQL search techniques. 
 
 Semantic search using embeddings + FAISS
 Baseline BM25 + SQL search
